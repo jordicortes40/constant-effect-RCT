@@ -1,4 +1,4 @@
-# constant effect in randomized clinical trials with quantitative outcome. Bibliographic review.
+# Constant effect in randomized clinical trials with quantitative outcome. Bibliographic review.
 
 **Under construction**
 
