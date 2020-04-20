@@ -36,13 +36,13 @@ source(paste0(URL,'code/subgroups.R'))
 xl <- bquote(bold(frac(S[OT]^2,S[OC]^2)))
 yl <- 'Standard error'
 
-##-- Colors according mean effect differences
+##-- Colors according to mean effect differences
 myFunnel(datos1,comparison='Between arms',model=rma.unadj,
-         subgroup='effect', zoom=TRUE,xlab=xl,ylab=yl)
+         subgroup='effect', zoom=FALSE,xlab=xl,ylab=yl)
 
-##-- Colors according variance differences
+##-- Colors according to variance differences
 myFunnel(datos1,comparison='Between arms',model=rma.unadj,
-         subgroup='variance',zoom=TRUE,xlab=xl,ylab=yl)
+         subgroup='variance',zoom=FALSE,xlab=xl,ylab=yl)
 
 ############################################################
 # Funnel over time
@@ -50,9 +50,13 @@ myFunnel(datos1,comparison='Between arms',model=rma.unadj,
 xl <- bquote(bold(frac(S[OT]^2,S[BT]^2)))
 yl <- 'Standard error'
 
-##-- Colors according mean effect differences
+##-- Colors according to mean effect differences
 myFunnel(datos1,comparison='Over time',model=rma.unadj2,
-         subgroup='effect',zoom=TRUE,xlab=xl,ylab=yl)
+         subgroup='effect',zoom=FALSE,xlab=xl,ylab=yl)
+
+##-- Colors according to mean effect differences
+myFunnel(datos1,comparison='Over time',model=rma.unadj2,
+         subgroup='variance',zoom=FALSE,xlab=xl,ylab=yl)
 
 ############################################################
 # Funnel between arms basal
@@ -64,7 +68,7 @@ myFunnel(datos1,comparison='Baseline between arms',model=rma.unadjB,
 
 #-----------------------------------------------------------------
 #
-# Differences --> Table 1
+# Number of studies with different variances
 #
 #-----------------------------------------------------------------
 ##########################################################################

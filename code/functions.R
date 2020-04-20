@@ -201,13 +201,21 @@ myFunnel <- function(data,comparison,model,subgroup=NA,zoom=TRUE,xlab,...){
       sign2 <-  x > 2*y
       sign <- sign1 | sign2
       
+      if(comparison=='Baseline between arms'){
+        cat(sum(sign1,na.rm=TRUE),'studies with lower variance in experimental group\n')
+        cat(sum(sign2,na.rm=TRUE),'studies with greater variance in experimental group\n')
+        cat(sum(!is.na(x))-sum(sign1,na.rm=TRUE)-sum(sign2,na.rm=TRUE),'studies with no significant differences in variance\n')
+      }else{
+        cat(sum(sign1,na.rm=TRUE),'studies with lower variance at the end of the study\n')
+        cat(sum(sign2,na.rm=TRUE),'studies with greater variance at the end of the study\n')
+        cat(sum(!is.na(x))-sum(sign1,na.rm=TRUE)-sum(sign2,na.rm=TRUE),'studies with no significant differences in variance\n')
+        cat('Hola')
+      }
+      
       ##-- Point colors
       co1 <- rgb(1,0,0,0.5)
       co2 <- rgb(0,0,0,0.5)
       co <- ifelse(sign,co1,co2)
-      cat(sum(sign1),'studies with lower variance in experimental group\n')
-      cat(sum(sign2),'studies with greater variance in experimental group\n')
-      cat(length(x)-sum(sign1)-sum(sign2),'studies with no significant differences in variance\n')
       pc <- 19
       legend('topright',c('Different variances','Non different variances'),
              pch=19,text.font = 2,pt.cex=1.3,
