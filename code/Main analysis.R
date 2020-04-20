@@ -10,17 +10,18 @@ source(paste0(URL,'code/read_data.R'))
 
 #-----------------------------------------------------------------
 #
-# Main Analysis --> All Models: 
-#     On complete datasets
-#     On reduced datasets
+# Main Analysis --> All Models. This section produces all model outputs: 
+#     - On complete datasets
+#     - On reduced datasets
+#
 #-----------------------------------------------------------------
 source(paste0(URL,'code/rma_models.R'))
 source(paste0(URL,'code/rma_models_reduced_data.R'))
 
 #-----------------------------------------------------------------
 #
-# Subgroup analysis --> Figures S2, S3 and S4
-#
+# Subgroup analysis
+# This section produces three plots with the subgroupa analyses
 #-----------------------------------------------------------------
 source(paste0(URL,'code/subgroups.R'))
 
@@ -32,7 +33,7 @@ source(paste0(URL,'code/subgroups.R'))
 ############################################################
 # Funnel between arms
 ############################################################
-xl <- bquote(bold(frac(V[OT],V[OC])))
+xl <- bquote(bold(frac(S[OT]^2,S[OC]^2)))
 yl <- 'Standard error'
 
 ##-- Colors according mean effect differences
@@ -46,7 +47,7 @@ myFunnel(datos1,comparison='Between arms',model=rma.unadj,
 ############################################################
 # Funnel over time
 ############################################################
-xl <- bquote(bold(frac(V[OT],V[BT])))
+xl <- bquote(bold(frac(S[OT]^2,S[BT]^2)))
 yl <- 'Standard error'
 
 ##-- Colors according mean effect differences
@@ -56,7 +57,7 @@ myFunnel(datos1,comparison='Over time',model=rma.unadj2,
 ############################################################
 # Funnel between arms basal
 ############################################################
-xl <- bquote(bold(frac(V[BT],V[BC])))
+xl <- bquote(bold(frac(S[BT]^2,S[BC]^2)))
 yl <- 'Standard error'
 myFunnel(datos1,comparison='Baseline between arms',model=rma.unadjB,
          subgroup='effect',zoom=FALSE,xlab=xl,ylab=yl)
@@ -70,42 +71,19 @@ myFunnel(datos1,comparison='Baseline between arms',model=rma.unadjB,
 ##-- Between arms
 ##########################################################################
 ##-- Based on model standard deviation
-greater.var.expM <- with(datos1,sum(yBetweenArmsRatio < (-qnorm(0.975)*seBetweenArmsRatio)))
-lower.var.expM <- with(datos1,sum(yBetweenArmsRatio > (qnorm(0.975)*seBetweenArmsRatio)))
+lower.var.expM <- with(datos1,sum(yBetweenArmsRatio < (-qnorm(0.975)*seBetweenArmsRatio)))
+greater.var.expM <- with(datos1,sum(yBetweenArmsRatio > (qnorm(0.975)*seBetweenArmsRatio)))
+cat('Studies with significative lower variance in the treated arm:',lower.var.expM,'\n')
+cat('Studies with significative greater variance in the treated arm:',greater.var.expM,'\n')
 
-##-- Based on F test
-Fest <- with(datos1,(final_sd_T1/final_sd_T2)^2)
-LL <- with(datos1,qf(0.025,final_cases_T1,final_cases_T2))
-UL <- with(datos1,qf(0.975,final_cases_T1,final_cases_T2))
-greater.var.expF <- sum(Fest < LL)
-lower.var.expF <- sum(Fest > UL)
 
 ##########################################################################
 ##-- Over time
 ##########################################################################
 ##-- Based on model standard deviation
-greater.var.outM <- with(datos1,sum(yOverTimeRatioT < (-qnorm(0.975)*seOverTimeRatioT),na.rm=TRUE))
-lower.var.outM <- with(datos1,sum(yOverTimeRatioT > (qnorm(0.975)*seOverTimeRatioT),na.rm=TRUE))
+lower.var.outM <- with(datos1,sum(yOverTimeRatioT < (-qnorm(0.975)*seOverTimeRatioT),na.rm=TRUE))
+greater.var.outM <- with(datos1,sum(yOverTimeRatioT > (qnorm(0.975)*seOverTimeRatioT),na.rm=TRUE))
+cat('Studies with significative lower variance at the end of the study:',lower.var.outM,'\n')
+cat('Studies with significative greater variance at the end of the study:',greater.var.outM,'\n')
 
-##-- Based on Q test
-datos.paired <- datos1[!is.na(datos1$seOverTimeRatioT),]
-sdx <- datos.paired$final_sd_T1
-sdy <- datos.paired$base_sd_T1
-n <- datos.paired$final_cases_T1
-rho <- datos.paired$rho
-Qest <- var.paired.test(sdx,sdy,n,rho)[[1]]
-num <- var.paired.test(sdx,sdy,n,rho)[[2]]
-den <- var.paired.test(sdx,sdy,n,rho)[[3]]
-LL2 <- qt(0.025,n-2)
-UL2 <- qt(0.975,n-2)
-greater.var.outQ <- sum(Qest < LL2) 
-lower.var.outQ <- sum(Qest > UL2)
 
-##########################################################################
-##-- Table 1
-##########################################################################
-table1 <- matrix(c(lower.var.expF,greater.var.expF,nrow(datos1)-lower.var.expF-greater.var.expF,
-                   lower.var.outQ,greater.var.outQ,nrow(datos.paired)-lower.var.outQ-greater.var.outQ),
-                 nrow=2,byrow=TRUE)
-table1
-prop.table(table1,1)
