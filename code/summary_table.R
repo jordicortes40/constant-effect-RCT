@@ -6,7 +6,7 @@ rm(list=ls())
 #
 #-----------------------------------------------------------------
 URL <- 'https://raw.githubusercontent.com/jordicortes40/constant-effect-RCT/master/'
-source(paste0(URL,'code/main_analysis.R')) 
+source(paste0(URL,'code/MA_main_analysis_rma.R')) 
 # source(paste0(URL,'code/SA_I_usual_tests.R')) 
 # source(paste0(URL,'code/SA_II_usual_tests.R')) 
 source(paste0(URL,'code/SA_III_usual_tests.R')) 
