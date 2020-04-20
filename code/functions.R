@@ -208,8 +208,7 @@ myFunnel <- function(data,comparison,model,subgroup=NA,zoom=TRUE,xlab,...){
       }else{
         cat(sum(sign1,na.rm=TRUE),'studies with lower variance at the end of the study\n')
         cat(sum(sign2,na.rm=TRUE),'studies with greater variance at the end of the study\n')
-        cat(sum(!is.na(x))-sum(sign1,na.rm=TRUE)-sum(sign2,na.rm=TRUE),'studies with no significant differences in variance\n')
-        cat('Hola')
+        cat(sum(!is.na(y))-sum(sign1,na.rm=TRUE)-sum(sign2,na.rm=TRUE),'studies with no significant differences in variance\n')
       }
       
       ##-- Point colors
