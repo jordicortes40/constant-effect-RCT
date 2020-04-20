@@ -38,16 +38,16 @@ options(scipen=3)
 # Load specific functions
 #
 #-----------------------------------------------------------------
-URL <- 'http://www-eio.upc.es/teaching/best/variability_data/'
-source(paste0(URL,'functions.R'))
+URL <- 'https://raw.githubusercontent.com/jordicortes40/constant-effect-RCT/master/'
+
+source(paste0(URL,'code/functions.R'))
 
 #-----------------------------------------------------------------
 #
 # Read data
 #
 #-----------------------------------------------------------------
-
-datos1 <- read.table(url(paste0(URL,'data.csv')),header=TRUE,sep=";",stringsAsFactors = TRUE,quote = "")
+datos1 <- read.table(url(paste0(URL,'data/data.csv')),header=TRUE,sep=",",stringsAsFactors = TRUE)
 closeAllConnections()
 
 #-----------------------------------------------------------------
@@ -177,15 +177,15 @@ ggplot(d_figure2,aes(x=ratio)) + geom_histogram(color='white') + scale_x_log10(l
 # Main Analysis --> Models table S1
 #
 #-----------------------------------------------------------------
-source(paste0(URL,'rma_models.R'))
-source(paste0(URL,'rma_models_reduced_data.R'))
+source(paste0(URL,'code/rma_models.R'))
+source(paste0(URL,'code/rma_models_reduced_data.R'))
 
 #-----------------------------------------------------------------
 #
 # Subgroup analysis --> Figures S2, S3 and S4
 #
 #-----------------------------------------------------------------
-source(paste0(URL,'subgroups.R'))
+source(paste0(URL,'code/subgroups.R'))
 
 #-----------------------------------------------------------------
 #
