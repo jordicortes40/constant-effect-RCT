@@ -15,8 +15,8 @@ source(paste0(URL,'code/read_data.R'))
 #     - On reduced datasets
 #
 #-----------------------------------------------------------------
-source(paste0(URL,'code/rma_models.R'))
-source(paste0(URL,'code/rma_models_reduced_data.R'))
+source(paste0(URL,'code/rma_models.R'),local=TRUE)
+source(paste0(URL,'code/rma_models_reduced_data.R'),local=TRUE)
 
 #-----------------------------------------------------------------
 #
@@ -87,3 +87,4 @@ cat('Studies with significative lower variance at the end of the study:',lower.v
 cat('Studies with significative greater variance at the end of the study:',greater.var.outM,'\n')
 
 
+plot(5,5)
