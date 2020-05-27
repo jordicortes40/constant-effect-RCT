@@ -216,6 +216,7 @@ gg3 <- ggplot(dd,aes(y=I2)) + geom_boxplot() +
   xlab('') + ylab(expression(bold(I^2))) + common.theme
 
 ##-- Arrange boxplots
+library(ggpubr)
 ggarrange(gg1,gg2,gg3,nrow=1, common.legend = TRUE,legend = 'bottom')
 
 
