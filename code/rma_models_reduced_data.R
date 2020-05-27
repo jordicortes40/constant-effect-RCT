@@ -1,18 +1,3 @@
-#-----------------------------------------------------------------
-#
-# Exclusions based on discrepancies
-#
-#-----------------------------------------------------------------
-##-- Exclusion variable to achieve a heterogeneity parameter (tau) around 0.07-0.08
-Exc_Basal       <- with(datos1,abs(yBaselineRatio/seBaselineRatio)>4)
-Exc_BetweenArms <- with(datos1,abs(yBetweenArmsRatio/seBetweenArmsRatio)>2.582)
-Exc_Overtime    <- with(datos1,abs(yOverTimeRatioT/seOverTimeRatioT)>2.4)
-
-##-- Reduced datasets
-dataB        <- datos1[!Exc_Basal,]                                           # Reduced data for baseline model
-dataBetArm   <- datos1[!Exc_BetweenArms,]                                     # Reduced data for between arms models
-dataOverTime <- datos1[!Exc_Overtime & !is.na(datos1$seOverTimeRatioT),]      # Reduced data for over-time models
-
 ############################################################
 # Reduced data --> Model - Reference model
 # log(Vbt/Vbc)~1
@@ -41,13 +26,13 @@ print(rma.red.unadj)
 cat('-------------------------------------------------------------------------------------------\n\n')
 
 cat('\n******************************************************************************************\n')
-cat('Reduced data --> Model 3 (Between arms adjusted): log(Vot/Voc)~ B·log(Vbt/Vbc)------------\n')
+cat('Reduced data --> Model 3 (Between arms adjusted): log(Vot/Voc)~ B?log(Vbt/Vbc)------------\n')
 cat('******************************************************************************************\n')
 print(rma.red.adj)
 cat('-------------------------------------------------------------------------------------------\n\n')
 
 cat('\n******************************************************************************************\n')
-cat('Reduced data --> Model 4 (Between arms with offset): log(Vot/Voc)~ 1·log(Vbt/Vbc)---------\n')
+cat('Reduced data --> Model 4 (Between arms with offset): log(Vot/Voc)~ 1?log(Vbt/Vbc)---------\n')
 cat('******************************************************************************************\n')
 print(rma.red.adjoff)
 cat('-------------------------------------------------------------------------------------------\n\n')
@@ -68,13 +53,13 @@ print(rma.red.unadj2)
 cat('-------------------------------------------------------------------------------------------\n\n')
 
 cat('\n******************************************************************************************\n')
-cat('Reduced data --> Model 6 (Over time adjusted): log(Vot/Vbt)~ B·log(Voc/Vbc) --------------\n')
+cat('Reduced data --> Model 6 (Over time adjusted): log(Vot/Vbt)~ B?log(Voc/Vbc) --------------\n')
 cat('******************************************************************************************\n')
 print(rma.red.adj2)
 cat('-------------------------------------------------------------------------------------------\n\n')
 
 cat('\n******************************************************************************************\n')
-cat('Reduced data --> Model 7 (Over time with offset): log(Vot/Vbt)~ 1·log(Voc/Vbc) -----------\n')
+cat('Reduced data --> Model 7 (Over time with offset): log(Vot/Vbt)~ 1?log(Voc/Vbc) -----------\n')
 cat('******************************************************************************************\n')
 print(rma.red.adj2off)
 cat('-------------------------------------------------------------------------------------------\n\n')

@@ -29,13 +29,13 @@ print(rma.unadj)
 cat('-------------------------------------------------------------------------\n\n')
 
 cat('\n*************************************************************************\n')
-cat('Model 3 (Between arms adjusted): log(Vot/Voc)~ B·log(Vbt/Vbc)------------\n')
+cat('Model 3 (Between arms adjusted): log(Vot/Voc)~ B*log(Vbt/Vbc)------------\n')
 cat('*************************************************************************\n')
 print(rma.adj)
 cat('-------------------------------------------------------------------------\n\n')
 
 cat('\n*************************************************************************\n')
-cat('Model 4 (Between arms with offset): log(Vot/Voc)~ 1·log(Vbt/Vbc)---------\n')
+cat('Model 4 (Between arms with offset): log(Vot/Voc)~ 1*log(Vbt/Vbc)---------\n')
 cat('*************************************************************************\n')
 print(rma.adjoff)
 cat('-------------------------------------------------------------------------\n\n')
@@ -48,7 +48,7 @@ data <- datos1[!is.na(datos1$seOverTimeRatioT),]
 
 rma.unadj2 <- rma(yOverTimeRatioT,sei=seOverTimeRatioT,data=data)                                                  # Unadjusted
 rma.adj2 <-   rma(yOverTimeRatioT,sei=seOverTimeRatioT,data=data,mods=~yOverTimeRatioC,method='REML')              # Adjusted by baseline
-rma.adj2off <- rma(yOverTimeRatioT-yOverTimeRatioC,sei=seOverTimeRatioT,data=data,method='REML')                   # Baseline as offset
+rma.adjoff2 <- rma(yOverTimeRatioT-yOverTimeRatioC,sei=seOverTimeRatioT,data=data,method='REML')                   # Baseline as offset
 
 ##-- Print
 cat('\n*************************************************************************\n')
@@ -58,15 +58,15 @@ print(rma.unadj2)
 cat('-------------------------------------------------------------------------\n\n')
 
 cat('\n*************************************************************************\n')
-cat('Model 6 (Over time adjusted): log(Vot/Vbt)~ B·log(Voc/Vbc) --------------\n')
+cat('Model 6 (Over time adjusted): log(Vot/Vbt)~ B*log(Voc/Vbc) --------------\n')
 cat('*************************************************************************\n')
 print(rma.adj2)
 cat('-------------------------------------------------------------------------\n\n')
 
 cat('\n*************************************************************************\n')
-cat('Model 7 (Over time with offset): log(Vot/Vbt)~ 1·log(Voc/Vbc) -----------\n')
+cat('Model 7 (Over time with offset): log(Vot/Vbt)~ 1*log(Voc/Vbc) -----------\n')
 cat('*************************************************************************\n')
-print(rma.adj2off)
+print(rma.adjoff2)
 cat('-------------------------------------------------------------------------\n\n')
 
 

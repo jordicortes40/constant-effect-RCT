@@ -12,10 +12,10 @@ quiet <- function(x) {
 #-----------------------------------------------------------------
 URL <- 'https://raw.githubusercontent.com/jordicortes40/constant-effect-RCT/master/'
 source(paste0(URL,'code/MA_main_analysis_rma.R'))
-# source(paste0(URL,'code/SA_I_usual_tests.R')) 
-# source(paste0(URL,'code/SA_II_usual_tests.R')) 
+# source(paste0(URL,'code/SA_I_heuristic.R')) 
+# source(paste0(URL,'code/SA_II_simulation.R')) 
 source(paste0(URL,'code/SA_III_usual_tests.R')) 
-# source(paste0(URL,'code/SA_IV_usual_tests.R')) 
+# source(paste0(URL,'code/SA_IV_mixture_distribution.R')) 
 
 ##########################################################################
 ##-- Table 1
