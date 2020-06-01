@@ -18,18 +18,13 @@ rm(list=ls())
 # Install and load packages
 #
 #-----------------------------------------------------------------
-##-- Install packages
-list.of.packages <- c('ggplot2','weights','catspec',
-                      'alabama','metafor','epitools')
+##-- Install packages and load packages
+list.of.packages <- c('data.table','weights','catspec',
+                      'alabama','metafor','epitools',
+                      'ggplot2','ggpubr')
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
-
-##-- Load packages
-library(ggplot2)
-library(weights)
-library(catspec)
-library(alabama)
-library(metafor)
+for (pkg in list.of.packages) library(pkg,character.only=TRUE)
 
 ##-- Penalize scientific notation
 options(scipen=3)

@@ -138,7 +138,7 @@ var.paired.test <- function(sdx,sdy,n,rho){
 }
 
 ##########################################################################
-# myFunnel. Pseu-do funnel plot
+# myFunnel. Pseudo funnel plot
 # data: standard deviation in one group
 # comparison: 'Between arms','Baseline between arms' or 'Over time'
 # model: number of cases
@@ -248,3 +248,61 @@ myFunnel <- function(data,comparison,model,subgroup=NA,zoom=TRUE,xlab,...){
     mtext(lab.22,1,adj=0,at=log(0.01),line=3.5,cex=.8,font=2,las=0)
   }
 }
+
+##########################################################################
+# limit_absolute_ratio. Given a limit for the ratio between th signal (y) and the noise (se), 
+# this function selects the subset of studies with lower ratio than this limit and
+# fit the rma model with this data. It returns the difference between the heterogeneity
+# of the model (tau) and a desired target heterogeneity (quantile_tau). Thid function is used
+# to find the optimal limit that minimizes this difference.
+#
+# limit: ratio between signal (y) and noise (se).
+# data: complete dataset
+# y: variance ratio
+# quantile_tau: target tau; target heterogeneity.
+##########################################################################
+limit_absolute_ratio <- function(limit,data,y,se,comparison,quantile_tau){
+  sel <- abs(y/se)<limit
+  data_reduced <- data[sel & !is.na(se),]
+  data_reduced$y <- y[sel & !is.na(se)]
+  data_reduced$se<- se[sel & !is.na(se)]
+  
+  if(comparison=='Baseline'){
+    mod <- rma(y,sei=se,data=data_reduced,method='REML')
+  }else if(comparison=='BA'){
+    mod <- rma(y,sei=se,data=data_reduced,mods=~yBaselineRatio,method='REML')
+  }else if(comparison=='OT'){
+    mod <- rma(y,sei=se,data=data_reduced,mods=~yOverTimeRatioC,method='REML')
+  }
+  return(sqrt(mod$tau2)-quantile_tau)
+}
+
+
+####################################################################
+# gg_color_hue. Function to defin colors in a hue scale
+#
+# n: number of colors to define
+####################################################################
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+####################################################################
+# QLIM. Estimates the limits of the paired test. This function is optimized to finf
+# a specific
+#
+# Qx: square sum (x-\bar{x})^2 at baseline
+# Qx: square sum (y-\bar{y})^2 at the end of the study
+# Qxy: (n-1)*Covariance
+# n: sample size
+####################################################################
+QLIM <- function(Qx,Qy,Qxy,n){
+  num <- (Qx-Qy)*sqrt(n-2)
+  aux <- Qx*Qy-Qxy^2
+  den <- 2*sqrt(max(-aux,aux))
+  Qest <- num/den
+  return(Qest - qt(c(0.975,0.025),n-2))
+}
+QLIM1 <- function(Qx,Qy,Qxy,n) QLIM(Qx,Qy,Qxy,n)[1]
+QLIM2 <- function(Qx,Qy,Qxy,n) QLIM(Qx,Qy,Qxy,n)[2]

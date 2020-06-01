@@ -28,6 +28,8 @@ ggplot(datos1,aes(x=yBaselineRatio,y=yBetweenArmsRatio,size=size)) +
         axis.title = element_text(face = 'bold',size=13),
         axis.text = element_text(face = 'bold',size=13))
 
+ggsave('../results_figures/SA_I_final_vs_baseline_discrepancies.jpeg')
+
 
 #-----------------------------------------------------------------
 #
@@ -136,13 +138,7 @@ gg3 <- ggplot(dd,aes(x=est,y=y,col=significance,xmin=LI,xmax=LS)) + geom_point()
 
 ##-- Arrange plots
 ggarrange(gg1,gg2,gg3,nrow=1,common.legend = TRUE,legend = "bottom")
-
-
-##-- Table to compare parameters
-dd1 <- data.frame(mu= c(rma.mod1$beta,      rma.mod2$beta,      rma.mod3$beta),
-                  tau=c(sqrt(rma.mod1$tau2),sqrt(rma.mod2$tau2),sqrt(rma.mod3$tau2)),
-                  I2= c(rma.mod1$I2,        rma.mod2$I2,        rma.mod3$I2))
-round(dd1,2)
+ggsave('../results_figures/SA_I_forest_single_simulation.jpeg',width = 8)
 
 #-------------------------------------------------------------------
 #
@@ -180,12 +176,16 @@ for (i in 1:nsim){
 colnames(M) <- c('mu','tau','I2')
 summary(M)
 dd <- as.data.frame(M)
+write.table(x = dd,file='../results_tables/SA_I_simulated_data_under_H0.txt',
+            row.names = FALSE,col.names = TRUE,sep='\t')
+
 
 ##-- Boxplots for the three parameters (mu, tau, I2) in all the simulations:
 rma.unadjB <- rma(yBaselineRatio,sei=seBaselineRatio,data=datos1)  
+rma.unadj <-   rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=datos1,method='REML')              # Adjusted by baseline
 rma.adj <-   rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=datos1,mods=~yBaselineRatio,method='REML')              # Adjusted by baseline
 REAL.BASELINE <- c(rma.unadjB$beta[1],sqrt(rma.unadjB$tau2),rma.unadjB$I2)
-REAL.FINAL <- c(rma.adj$beta[1],sqrt(rma.adj$tau2),rma.adj$I2)
+REAL.FINAL <- c(rma.unadj$beta[1],sqrt(rma.unadj$tau2),rma.unadj$I2)
 
 ##-- Graphical parameters
 cols <- c("BASELINE"="blue","OUTCOME"="red")         # Colors
@@ -216,9 +216,14 @@ gg3 <- ggplot(dd,aes(y=I2)) + geom_boxplot() +
   xlab('') + ylab(expression(bold(I^2))) + common.theme
 
 ##-- Arrange boxplots
-library(ggpubr)
 ggarrange(gg1,gg2,gg3,nrow=1, common.legend = TRUE,legend = 'bottom')
+ggsave('../results_figures/SA_I_parameters_distribution_simulation.jpeg')
 
+##-- Table to compare parameters
+dd1 <- data.frame(mu= c(mean(dd$mu), REAL.BASELINE[1],REAL.FINAL[1]),
+                  tau=c(mean(dd$tau),REAL.BASELINE[2],REAL.FINAL[2]),
+                  I2= c(mean(dd$I2), REAL.BASELINE[3],REAL.FINAL[3]))
+round(dd1,2)
 
 
 #-----------------------------------------------------------------
@@ -226,10 +231,29 @@ ggarrange(gg1,gg2,gg3,nrow=1, common.legend = TRUE,legend = 'bottom')
 # Exclusions based on discrepancies
 #
 #-----------------------------------------------------------------
+##-- Tau_target is the (arbitrary) quantile 0.90 of the simulated distribution in a non-heterogeneity scenario.
+tau_target <- quantile(dd$tau,0.90)
+
+##-- Remove studies up to heterogeneity was close to tau target
+limit_ratio_baseline <- uniroot(limit_absolute_ratio,interval=c(0.001,100),
+                                data=datos1,
+                                y=datos1$yBaselineRatio,
+                                se=datos1$seBaselineRatio,comparison='Baseline',
+                                quantile_tau=tau_target)$root
+limit_ratio_BA <- uniroot(limit_absolute_ratio,interval=c(0.001,100),
+                                data=datos1,
+                                y=datos1$yBetweenArmsRatio,
+                                se=datos1$seBetweenArmsRatio,comparison='BA',
+                                quantile_tau=tau_target)$root
+limit_ratio_OT <- uniroot(limit_absolute_ratio,interval=c(0.001,100),
+                          data=datos1,
+                          y=datos1$yOverTimeRatioT,
+                          se=datos1$seOverTimeRatioT,comparison='OT',
+                          quantile_tau=tau_target,extendInt='yes')$root
 ##-- Exclusion variable to achieve a heterogeneity parameter (tau) around 0.07-0.08
-Exc_Basal       <- with(datos1,abs(yBaselineRatio/seBaselineRatio)>4)
-Exc_BetweenArms <- with(datos1,abs(yBetweenArmsRatio/seBetweenArmsRatio)>2.582)
-Exc_Overtime    <- with(datos1,abs(yOverTimeRatioT/seOverTimeRatioT)>2.4)
+Exc_Basal       <- with(datos1,abs(yBaselineRatio/seBaselineRatio)>=limit_ratio_baseline)
+Exc_BetweenArms <- with(datos1,abs(yBetweenArmsRatio/seBetweenArmsRatio)>=limit_ratio_BA)
+Exc_Overtime    <- with(datos1,abs(yOverTimeRatioT/seOverTimeRatioT)>=limit_ratio_OT)
 
 ##-- Reduced datasets
 dataB        <- datos1[!Exc_Basal,]                                           # Reduced data for baseline model
@@ -247,3 +271,20 @@ cat('Reduced dataset over time (n=',nrow(dataOverTime),')\n',sep = '')
 #
 #-----------------------------------------------------------------
 source(paste0(URL,'code/rma_models_reduced_data.R'),local=TRUE)
+
+#-----------------------------------------------------------------
+#
+# Data for summary table
+#
+#-----------------------------------------------------------------
+##-- Between arms
+SAI_greater_BA <- sum(Exc_BetweenArms & datos1$yBetweenArmsRatio>0)
+SAI_lower_BA <- sum(Exc_BetweenArms & datos1$yBetweenArmsRatio<0)
+SAI_equal_BA <- nrow(datos1) - SAI_lower_BA - SAI_greater_BA
+SAI_greater_BA; SAI_lower_BA; SAI_equal_BA
+
+##-- Over time
+SAI_greater_OT <- sum(Exc_Overtime & datos1$yOverTimeRatioT>0,na.rm=TRUE)
+SAI_lower_OT <- sum(Exc_Overtime & datos1$yOverTimeRatioT<0,na.rm=TRUE)
+SAI_equal_OT <- sum(!is.na(datos1$seOverTimeRatioT)) - SAI_lower_OT - SAI_greater_OT
+SAI_greater_OT; SAI_lower_OT; SAI_equal_OT
