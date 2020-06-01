@@ -54,20 +54,34 @@ ans4 = auglag(par=P0, fn=fn4, heq=heq4,hin=hin4, hin.jac=hin.jac4, control.outer
 ##############################################################
 # Check distributions using a QQplot
 ##############################################################
-##-- Base
-graphics.off()
-windows()
-par(las=1,mfrow=c(2,2))
 x <- seq(0,1,0.001)
-dd <- d[,1]
-plot(ecdf(dd),cex=0.2,main='Uniform + Beta')
-lines(x,F1(x,ans1$par),col=2)
-plot(ecdf(dd),cex=0.2,main='Uniform +  2 Betas')
-lines(x,F2(x,ans2$par),col=2)
-plot(ecdf(dd),cex=0.2,main='Uniform +  2 Triangular')
-lines(x,F3(x,ans3$par),col=2)
-plot(ecdf(dd),cex=0.2,main='Uniform +  2 Exponentials')
-lines(x,F4(x,ans4$par),col=2)
+fit <- data.frame(x=x,
+                  fit1=F1(x,ans1$par),fit2=F2(x,ans2$par),
+                  fit3=F3(x,ans3$par),fit4=F4(x,ans4$par))
+common_theme <- theme(axis.text = element_text(face='bold',size=10),
+                      axis.title = element_text(face='bold',size=13) )
+gg1 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") + 
+  geom_line(data = fit,mapping=aes(x=x,y=fit1),size=1,col='darkblue',alpha=0.5) +
+  ggtitle('Uniform + Beta') + xlab('p values') + ylab(expression(F[n](x))) +
+  common_theme
+
+gg2 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") + 
+  geom_line(data = fit,mapping=aes(x=x,y=fit2),size=1,col='darkblue',alpha=0.5) +
+  ggtitle('Uniform + 2 Beta') + xlab('p values') + ylab(expression(F[n](x))) +
+  common_theme
+
+gg3 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") + 
+  geom_line(data = fit,mapping=aes(x=x,y=fit3),size=1,col='darkblue',alpha=0.5) +
+  ggtitle('Uniform + 2 Triangular') + xlab('p values') + ylab(expression(F[n](x))) +
+  common_theme
+
+gg4 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") + 
+  geom_line(data = fit,mapping=aes(x=x,y=fit4),size=1,col='darkblue',alpha=0.5) +
+  ggtitle('Uniform + 2 Exponential') + xlab('p values') + ylab(expression(F[n](x))) +
+  common_theme
+
+ggarrange(gg1,gg2,gg3,gg4,nrow=2,ncol=2)
+ggsave(filename = '../results_figures/SA_IV_qqplots.jpg')
 
 ##############################################################
 # Check distributions using:
