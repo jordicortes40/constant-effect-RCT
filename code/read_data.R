@@ -21,7 +21,7 @@ rm(list=ls())
 ##-- Install packages and load packages
 list.of.packages <- c('data.table','weights','catspec',
                       'alabama','metafor','epitools',
-                      'ggplot2','ggpubr')
+                      'ggplot2','ggpubr','gridExtra')
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 for (pkg in list.of.packages) library(pkg,character.only=TRUE)
