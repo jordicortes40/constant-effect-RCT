@@ -8,12 +8,12 @@ rm(list=ls())
 URL <- 'https://raw.githubusercontent.com/jordicortes40/constant-effect-RCT/master/'
 source(paste0(URL,'code/read_data.R')) 
 source(paste0(URL,'code/pvalue_distribution_mixture_functions.R'))      # Functions for the likelihood
-datos <- read.table(paste0(URL,'results_tables/SA_III_pvalues_BA.txt'),header=TRUE,sep='\t')[,1]                      # Read data
+d <- read.table(paste0(URL,'results_tables/SA_III_pvalues_BA.txt'),
+                header=TRUE,sep='\t')
 
 ##############################################################
 # Descriptive
 ##############################################################
-d <- data.frame(x=datos)
 gg1 <- ggplot(d,aes(x=x,y=stat(density))) + geom_histogram(col='white',bins=10,breaks=seq(0,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous() + xlab('p-values') + ylab('n') + labs(title='Histogram') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +

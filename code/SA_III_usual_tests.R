@@ -22,10 +22,10 @@ source(paste0(URL,'code/read_data.R'))
 Fest <- with(datos1,(final_sd_T1/final_sd_T2)^2)
 LL <- with(datos1,qf(0.025,final_cases_T1-1,final_cases_T2-1))
 UL <- with(datos1,qf(0.975,final_cases_T1-1,final_cases_T2-1))
-p_values_BA <- data.frame(p_values_BA=pf(Fest,
+p_values_BA <- data.frame(p_values=pf(Fest,
                                          datos1$final_cases_T1-1,
                                          datos1$final_cases_T2-1))
-write.table(x = data.frame(p_values_BA=p_values_BA),file='../results_tables/SA_III_pvalues_BA.txt',
+write.table(x = p_values_BA,file='../results_tables/SA_III_pvalues_BA.txt',
             row.names = FALSE,col.names = TRUE,sep='\t',quote = FALSE)
 ##########################################################################
 ##-- Over time
@@ -41,8 +41,8 @@ num <- var.paired.test(sdx,sdy,n,rho)[[2]]
 den <- var.paired.test(sdx,sdy,n,rho)[[3]]
 LL2 <- qt(0.025,n-2)
 UL2 <- qt(0.975,n-2)
-p_values_OT <- data.frame(p_values_OT=pt(Qest,n-2))
-write.table(x = data.frame(p_values_OT=p_values_OT),file='../results_tables/SA_III_pvalues_OT.txt',
+p_values_OT <- data.frame(p_values=pt(Qest,n-2))
+write.table(x = p_values_OT,file='../results_tables/SA_III_pvalues_OT.txt',
             row.names = FALSE,col.names = TRUE,sep='\t',quote = FALSE)
 
 #-----------------------------------------------------------------
