@@ -33,7 +33,7 @@ gg2 <- ggplot(d,aes(sample=p_values)) + stat_qq(distribution = qunif,size=2,alph
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 ggarrange(gg1,gg2,nrow=1)
-ggsave(filename = '../results_figures/SA_IV_pvalue_descriptive_BA.jpg')
+ggsave(filename = '../results_figures/SA_IV_pvalue_descriptive_BA.jpg',width=8,height=4)
 
 ##############################################################
 # Models estimation
@@ -88,7 +88,7 @@ gg4 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") +
   common_theme
 
 ggarrange(gg1,gg2,gg3,gg4,nrow=2,ncol=2)
-ggsave(filename = '../results_figures/SA_IV_qqplots_BA.jpg')
+ggsave(filename = '../results_figures/SA_IV_qqplots_BA.jpg',width=8,height=8)
 
 ##############################################################
 # Check distributions using:
@@ -159,7 +159,7 @@ gg4 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
         title = element_text(face='bold',size = 15))
 
 ggarrange(gg1,gg2,gg3,gg4,nrow=2,ncol=2)
-ggsave(filename = '../results_figures/SA_IV_histograms_BA.jpg')
+ggsave(filename = '../results_figures/SA_IV_histograms_BA.jpg',width=8,height=8)
 
 
 #-----------------------------------------------------------------
@@ -201,7 +201,7 @@ gg2 <- ggplot(d,aes(sample=p_values)) + stat_qq(distribution = qunif,size=2,alph
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 ggarrange(gg1,gg2,nrow=1)
-ggsave(filename = '../results_figures/SA_IV_pvalue_descriptive_OT.jpg')
+ggsave(filename = '../results_figures/SA_IV_pvalue_descriptive_OT.jpg',width=8,height=4)
 
 ##############################################################
 # Models estimation
@@ -256,7 +256,7 @@ gg4 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") +
   common_theme
 
 ggarrange(gg1,gg2,gg3,gg4,nrow=2,ncol=2)
-ggsave(filename = '../results_figures/SA_IV_qqplots_OT.jpg')
+ggsave(filename = '../results_figures/SA_IV_qqplots_OT.jpg',width=8,height=8)
 
 ##############################################################
 # Check distributions using:
@@ -327,7 +327,7 @@ gg4 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
         title = element_text(face='bold',size = 15))
 
 ggarrange(gg1,gg2,gg3,gg4,nrow=2,ncol=2)
-ggsave(filename = '../results_figures/SA_IV_histograms_OT.jpg')
+ggsave(filename = '../results_figures/SA_IV_histograms_OT.jpg',width=8,height=8)
 
 
 #-----------------------------------------------------------------
