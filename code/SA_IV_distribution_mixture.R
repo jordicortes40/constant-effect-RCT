@@ -14,26 +14,26 @@ d <- read.table(paste0(URL,'results_tables/SA_III_pvalues_BA.txt'),
 ##############################################################
 # Descriptive
 ##############################################################
-gg1 <- ggplot(d,aes(x=x,y=stat(density))) + geom_histogram(col='white',bins=10,breaks=seq(0,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
+gg1 <- ggplot(d,aes(x=p_values,y=stat(density))) + geom_histogram(col='white',bins=10,breaks=seq(0,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous() + xlab('p-values') + ylab('n') + labs(title='Histogram') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   theme(axis.title = element_text(face='bold',size = 13),
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
-gg2 <- ggplot(d,aes(sample=x)) + stat_qq(distribution = qunif,size=2,alpha=0.5,color=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
+gg2 <- ggplot(d,aes(sample=p_values)) + stat_qq(distribution = qunif,size=2,alpha=0.5,color=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   stat_qq_line(distribution = qunif) +
   scale_x_continuous() + xlab('Theoretical Uniform') + ylab('Sample') + labs(title='QQplot') +
   theme(axis.title = element_text(face='bold',size = 13),
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
-grid.arrange(gg1,gg2,nrow=1)
-
+ggarrange(gg1,gg2,nrow=1)
+ggsave(filename = '../results_figures/SA_IV_pvalue_descriptive.jpg')
 
 ##############################################################
 # Models estimation
 ##############################################################
-
-var = list(datos=datos)     # If some pvalues are almost 0 or 1, some bounds could be added --> pmin(pmax(datos,10^-5),1-10^-5)
+# If some pvalues are almost 0 or 1, some bounds could be added --> pmin(pmax(datos,10^-5),1-10^-5)
+var = list(datos=d[,1])     
 
 ##-- Uniform + Beta 
 P0 = c(0.4, 1, 1)
@@ -54,19 +54,20 @@ ans4 = auglag(par=P0, fn=fn4, heq=heq4,hin=hin4, hin.jac=hin.jac4, control.outer
 ##############################################################
 # Check distributions using a QQplot
 ##############################################################
-## -- Base
+##-- Base
 graphics.off()
 windows()
 par(las=1,mfrow=c(2,2))
-d <- seq(0,1,0.001)
-plot(ecdf(datos),cex=0.2,main='Uniform + Beta')
-lines(d,F1(d,ans1$par),col=2)
-plot(ecdf(datos),cex=0.2,main='Uniform +  2 Betas')
-lines(d,F2(d,ans2$par),col=2)
-plot(ecdf(datos),cex=0.2,main='Uniform +  2 Triangular')
-lines(d,F3(d,ans3$par),col=2)
-plot(ecdf(datos),cex=0.2,main='Uniform +  2 Exponentials')
-lines(d,F4(d,ans4$par),col=2)
+x <- seq(0,1,0.001)
+dd <- d[,1]
+plot(ecdf(dd),cex=0.2,main='Uniform + Beta')
+lines(x,F1(x,ans1$par),col=2)
+plot(ecdf(dd),cex=0.2,main='Uniform +  2 Betas')
+lines(x,F2(x,ans2$par),col=2)
+plot(ecdf(dd),cex=0.2,main='Uniform +  2 Triangular')
+lines(x,F3(x,ans3$par),col=2)
+plot(ecdf(dd),cex=0.2,main='Uniform +  2 Exponentials')
+lines(x,F4(x,ans4$par),col=2)
 
 ##############################################################
 # Check distributions using:
@@ -78,10 +79,10 @@ lines(d,F4(d,ans4$par),col=2)
 graphics.off()
 windows()
 par(las=1,mfrow=c(2,2))
-RES <- rbind(results(datos,ans1,nparam=3,F1,f1,'Uniform + Beta'),
-             results(datos,ans2,nparam=6,F2,f2,'Uniform + 2 Betas'),
-             results(datos,ans3,nparam=4,F3,f3,'Uniform + 2 Triangular'),
-             results(datos,ans4,nparam=4,F4,f4,'Uniform + 2 Exponentials'))
+RES <- rbind(results(d[,1],ans1,nparam=3,F1,f1,'Uniform + Beta'),
+             results(d[,1],ans2,nparam=6,F2,f2,'Uniform + 2 Betas'),
+             results(d[,1],ans3,nparam=4,F3,f3,'Uniform + 2 Triangular'),
+             results(d[,1],ans4,nparam=4,F4,f4,'Uniform + 2 Exponentials'))
 colnames(RES) <- c('nparam','LL','AIC','KS1','KS2','pu','95%LL(pu)','95%UL(pu)','max_f(x)','iterations')
 RES
 
@@ -132,3 +133,4 @@ gg2 <- ggplot(d,aes(x=x)) + geom_histogram(aes(y=..density..),col='white',bins=1
         title = element_text(face='bold',size = 15))
 
 grid.arrange(gg1,gg2,gg3,gg4,nrow=2)
+ggarrange(gg1,gg2,gg3,gg4,nrow=2)

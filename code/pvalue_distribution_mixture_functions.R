@@ -51,19 +51,19 @@ fn2 <- function(x, var, ...) {
 
 hin2 <- function(x, var, ...) {
   h <- c()
-  h[1:6] = x-1.e-5    # x > 0
-  h[7:8] = 1-x[1:2]   # p < 1
-  h[9] = x[4]-x[3]    # a1 < b1
-  h[10] = x[5]-x[6]   # a2 > b2
+  h[1:6] = x-1.e-5  # x > 0
+  h[7] = 1-x[1]-x[2]# p1+p2 < 1
+  h[8] = x[4]-x[3]  # a1 < b1
+  h[9] = x[5]-x[6]  # a2 > b2
   h
 }
 
 hin.jac2 <- function(x, var, ...) {
-  j <- matrix(0, 10, length(x))
+  j <- matrix(0, 9, length(x))
   j[1:6, 1:6] = diag(rep(1,6))
-  j[7:8, 1:2] = diag(c(-1,-1))
-  j[9, c(3,4)] = c(-1, 1)
-  j[10, c(5,6)] = c(1, -1)
+  j[7, 1:2] = rep(-1,2)
+  j[8, c(3,4)] = c(-1, 1)
+  j[9, c(5,6)] = c(1, -1)
   j
 }
 
@@ -91,13 +91,15 @@ hin3 <- function(x, var, ...) {
   h <- c()
   h[1:4] = x-1.e-5          # x > 0
   h[5:8] = 1-x[1:4]-1.e-5   # x < 1
+  h[9]   = 1-x[1]-x[2]-1.e-5# x[1] + x[2] < 1
   h
 }
 
 hin.jac3 <- function(x, var, ...) {
-  j <- matrix(0, 8, length(x))
+  j <- matrix(0, 9, length(x))
   j[1:4, 1:4] = diag(rep(1,4))
   j[5:8, 1:4] = diag(rep(-1,4))  
+  j[9,1:2] <- rep(-1,2)
   j
 }
 
@@ -128,12 +130,12 @@ heq3 <- function(x, var, ...) {
 ##-- Exponential 2
 #                           /|
 #                         /  |
-#                       /   |
+#                       /    |
 #                      /     |
 #                    /       |
 #                 /          |
 #              /             |
-#         /                  |              \
+#         /                  |              
 #    /                       |                   
 # /                          |
 #-----------------------------
@@ -141,7 +143,7 @@ heq3 <- function(x, var, ...) {
 
 
 dexp1 <- function (x,lambda) dexp(x,lambda)/(1-exp(-lambda))            # Standardized to interval 0-1
-dexp2 <- function (x,lambda) lambda*exp(lambda*(x-1))/(1-exp(-lambda))  # Translated
+dexp2 <- function (x,lambda) lambda*exp(-lambda*(1-x))/(1-exp(-lambda))  # Translated
 
 fn4 <- function(x, var, ...) {
   datos = var$datos
@@ -152,14 +154,15 @@ fn4 <- function(x, var, ...) {
 hin4 <- function(x, var, ...) {
   h <- c()
   h[1:4] = x-1.e-5    # x > 0
-  h[5:6] = 1-x[1:2]   # p < 1
+  h[5] = 1-x[1]-x[2]-1.e-5  # x[1] + x[2] < 1
   h
 }
 
 hin.jac4 <- function(x, var, ...) {
-  j <- matrix(0, 6, length(x))
+  j <- matrix(0, 5, length(x))
   j[1:4, 1:4] = diag(rep(1,4))
-  j[5:6, 3:4] = diag(rep(-1,2))
+  # j[5:6, 1:2] = diag(rep(-1,2))
+  j[5,1:2] <- rep(-1,2) 
   j
 }
 
