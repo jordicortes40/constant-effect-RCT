@@ -130,8 +130,7 @@ x2_2 <- -log(LI2/datos2$base_sd_T1)[y_neg]
 x2 <- 1/sqrt(datos2$base_cases_T1)
  
 # Significant studies
-Qest_sel <- Qest[sel_OT]
-sign2 <- Qest<LL2[sel_OT] | Qest>UL2[sel_OT] 
+sign2 <- Qest<LL2 | Qest>UL2
 
 ##-- Plot
 # Initialize
@@ -170,39 +169,36 @@ mtext("Variability",1,adj=0,at=log(0.01),line=3.3,cex=.8,font=2,las=1)
 
 dev.off()
 
-## Non-significative study with less variance ratio
-which.min(y2[!sign2])
-exp(y2[!sign2][11])
-datos2[!sign2,][11,] # rho 0.306
-
-## Significative with variance ratio closest to 1. It's by chance to obtain the same number (11)
-which.max(y2[sign2 & y2<0])
-exp(y2[sign2 & y2<0][11])
-datos2[sign2 & y2<0,][11,] # rho 0.997
-max(datos2$rho)
-
 ############################################################
 # Funnel plot over-time (vertical) --> Function of the statistic
 ############################################################
-##-- Funnel con Q
-y2 <- 1/sqrt(n)
+##-- Previos calculations
+y2 <- 1/sqrt(datos2$base_cases_T1)
 x2 <- -Qest
+
+##-- Plot
+jpeg('../results_figures/SA_III_funnel_Q_statistic_OT.jpeg',width=27,height=21,units = 'cm',res=144)
 par(mgp=c(3,1,0))
 plot(x2,y2,col=co1[sign2+1],pch=19,xlim=c(-10,10),ylim=c(0.35,0.05),ylab=bquote(bold("Uncertainty"~~~bgroup("(",frac(1,sqrt(n[BT])),")"))),xlab='Q')
 rect(-15,0,15,1,col=colbg)
 abline(h=seq(0.05,0.35,0.05),col='white',lwd=2)
+
+# Plot region
 ypoly <- c(0,.4,.4,0)
-xpoly <- as.numeric(c(predict(lm(LI2~x2),data.frame(x2=ypoly[1:2])),predict(lm(LS2~x2),data.frame(x2=ypoly[3:4]))))
+xpoly <- as.numeric(c(predict(lm(LL2~x2),data.frame(x2=ypoly[1:2])),predict(lm(UL2~x2),data.frame(x2=ypoly[3:4]))))
 polygon(x=xpoly,y=ypoly,col='white',border=1,lty=3)
 xaxis <- 0.35 + 0.04*(0.35-0.05)
 segments(-10,xaxis,10,xaxis,col=1,lwd=1,lty=1)
 abline(v=0,lty=1,col=1,lwd=1)
 points(x2,y2,col=co1[sign2+1],pch=19)
+
+# Labels
 mtext("Greater Outcome",1,adj=1,at=10,line=2.5,cex=.8,font=2,las=0)
 mtext("Variability",1,adj=1,at=10,line=3.3,cex=.8,font=2,las=0)
 mtext("Greater Baseline",1,adj=0,at=-10,line=2.5,cex=.8,font=2,las=0)
 mtext("Variability",1,adj=0,at=-10,line=3.3,cex=.8,font=2,las=0)
 
+dev.off()
 
 
 
