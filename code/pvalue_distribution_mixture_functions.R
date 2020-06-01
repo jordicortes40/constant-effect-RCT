@@ -1,74 +1,10 @@
 ##############################################################
 # List
-# 1. Uniform + 1 beta
-# 2. Uniform + 2 beta
-# 3. Uniform + 2 triangular
-# 4. Uniform + 2 exponential
+# 1. Uniform + 2 triangular
+# 2. Uniform + 2 exponential
+# 3. Uniform + 1 beta
+# 4. Uniform + 2 beta
 ##############################################################
-
-##############################################################
-# Uniform + 1 beta
-# x[1]:   Proportion coming from the U(0,1)
-# x[2:3]: Beta parameters
-##############################################################
-fn1 <- function(x, var, ...) {
-  datos = var$datos
-  y = log(x[1] + (1-x[1])*dbeta(datos, x[2], x[3]))
-  -sum(y)
-}
-
-hin1 <- function(x, var, ...) {
-  h <- c()
-  h[1:3] = x-1.e-5      # x > 0
-  h[4] = 1-x[1]         # p < 1
-  h
-}
-
-hin.jac1 <- function(x, var, ...) {
-  j <- matrix(0, 4, length(x))
-  j[1:3, 1:3] = diag(c(1,1,1))
-  j[4,1] = -1
-  j
-}
-
-heq1 <- function(x, var, ...) {
-}
-
-
-##############################################################
-# Uniform + 2 beta
-# x[1]:   Proportion coming from the U(0,1)
-# x[2]:   Proportion coming from the first beta distribution
-# x[3:4]: Beta parameters for the first beta distribution
-# x[5:6]: Beta parameters for the 2nd beta distribution
-##############################################################
-
-fn2 <- function(x, var, ...) {
-  datos = var$datos
-  y = log(x[1] + x[2]*dbeta(datos, x[3], x[4]) + (1-x[1]-x[2])*dbeta(datos, x[5], x[6]))
-  -sum(y)
-}
-
-hin2 <- function(x, var, ...) {
-  h <- c()
-  h[1:6] = x-1.e-5  # x > 0
-  h[7] = 1-x[1]-x[2]# p1+p2 < 1
-  h[8] = x[4]-x[3]  # a1 < b1
-  h[9] = x[5]-x[6]  # a2 > b2
-  h
-}
-
-hin.jac2 <- function(x, var, ...) {
-  j <- matrix(0, 9, length(x))
-  j[1:6, 1:6] = diag(rep(1,6))
-  j[7, 1:2] = rep(-1,2)
-  j[8, c(3,4)] = c(-1, 1)
-  j[9, c(5,6)] = c(1, -1)
-  j
-}
-
-heq2 <- function(x, var, ...) {
-} 
 
 ##############################################################
 # Uniform + 2 triangular
@@ -81,13 +17,13 @@ heq2 <- function(x, var, ...) {
 dtriangle1 <- function (x,base) pmax(2/base - 2/(base^2) * x, 0.001 , na.rm = FALSE)
 dtriangle2 <- function (x,base) pmax((2/(1-base)^2) * (x - base), 0.001 , na.rm = FALSE)
 
-fn3 <- function(x, var, ...) {
+fn1 <- function(x, var, ...) {
   datos = var$datos
   y = log(x[1] + x[2]*dtriangle1(datos,x[3]) + (1-x[1]-x[2])*dtriangle2(datos,x[4]))
   -sum(y)
 }
 
-hin3 <- function(x, var, ...) {
+hin1 <- function(x, var, ...) {
   h <- c()
   h[1:4] = x-1.e-5          # x > 0
   h[5:8] = 1-x[1:4]-1.e-5   # x < 1
@@ -95,7 +31,7 @@ hin3 <- function(x, var, ...) {
   h
 }
 
-hin.jac3 <- function(x, var, ...) {
+hin.jac1 <- function(x, var, ...) {
   j <- matrix(0, 9, length(x))
   j[1:4, 1:4] = diag(rep(1,4))
   j[5:8, 1:4] = diag(rep(-1,4))  
@@ -103,7 +39,7 @@ hin.jac3 <- function(x, var, ...) {
   j
 }
 
-heq3 <- function(x, var, ...) {
+heq1 <- function(x, var, ...) {
 } 
 
 ##############################################################
@@ -145,30 +81,93 @@ heq3 <- function(x, var, ...) {
 dexp1 <- function (x,lambda) dexp(x,lambda)/(1-exp(-lambda))            # Standardized to interval 0-1
 dexp2 <- function (x,lambda) lambda*exp(-lambda*(1-x))/(1-exp(-lambda))  # Translated
 
-fn4 <- function(x, var, ...) {
+fn2 <- function(x, var, ...) {
   datos = var$datos
   y = log(x[1] + x[2]*dexp1(datos,x[3]) + (1-x[1]-x[2])*dexp2(datos,x[4]))
   -sum(y)
 }
 
-hin4 <- function(x, var, ...) {
+hin2 <- function(x, var, ...) {
   h <- c()
   h[1:4] = x-1.e-5    # x > 0
   h[5] = 1-x[1]-x[2]-1.e-5  # x[1] + x[2] < 1
   h
 }
 
-hin.jac4 <- function(x, var, ...) {
+hin.jac2 <- function(x, var, ...) {
   j <- matrix(0, 5, length(x))
   j[1:4, 1:4] = diag(rep(1,4))
-  # j[5:6, 1:2] = diag(rep(-1,2))
   j[5,1:2] <- rep(-1,2) 
+  j
+}
+
+heq2 <- function(x, var, ...) {
+} 
+
+
+##############################################################
+# Uniform + 1 beta
+# x[1]:   Proportion coming from the U(0,1)
+# x[2:3]: Beta parameters
+##############################################################
+fn3 <- function(x, var, ...) {
+  datos = var$datos
+  y = log(x[1] + (1-x[1])*dbeta(datos, x[2], x[3]))
+  -sum(y)
+}
+
+hin3 <- function(x, var, ...) {
+  h <- c()
+  h[1:3] = x-1.e-5      # x > 0
+  h[4] = 1-x[1]         # p < 1
+  h
+}
+
+hin.jac3 <- function(x, var, ...) {
+  j <- matrix(0, 4, length(x))
+  j[1:3, 1:3] = diag(c(1,1,1))
+  j[4,1] = -1
+  j
+}
+
+heq3 <- function(x, var, ...) {
+}
+
+
+##############################################################
+# Uniform + 2 beta
+# x[1]:   Proportion coming from the U(0,1)
+# x[2]:   Proportion coming from the first beta distribution
+# x[3:4]: Beta parameters for the first beta distribution
+# x[5:6]: Beta parameters for the 2nd beta distribution
+##############################################################
+
+fn4 <- function(x, var, ...) {
+  datos = var$datos
+  y = log(x[1] + x[2]*dbeta(datos, x[3], x[4]) + (1-x[1]-x[2])*dbeta(datos, x[5], x[6]))
+  -sum(y)
+}
+
+hin4 <- function(x, var, ...) {
+  h <- c()
+  h[1:6] = x-1.e-5  # x > 0
+  h[7] = 1-x[1]-x[2]# p1+p2 < 1
+  h[8] = x[4]-x[3]  # a1 < b1
+  h[9] = x[5]-x[6]  # a2 > b2
+  h
+}
+
+hin.jac4 <- function(x, var, ...) {
+  j <- matrix(0, 9, length(x))
+  j[1:6, 1:6] = diag(rep(1,6))
+  j[7, 1:2] = rep(-1,2)
+  j[8, c(3,4)] = c(-1, 1)
+  j[9, c(5,6)] = c(1, -1)
   j
 }
 
 heq4 <- function(x, var, ...) {
 } 
-
 
 
 
@@ -225,26 +224,22 @@ results <- function(datos,ans,nparam,F,f,tit,hist=TRUE){
   x0 <- c(0,x,1,0)
   y0 <- c(0,y,0,0)
   polygon(x0,y0,col=rgb(0,0,1,0.5),border=NA,ylim=c(0,5))
-  # plot(ecdf(datos),verticals=F,pch=0)
-  # plot(ecdf(y),verticals=F,pch=0,add=TRUE,col=2)
-  
+
   return(c(nparam,LL,AIC,KS1,KS2,pu,LI[1],LS[1],max(y),ntry))
 }
 
 ##############################################################
 # Density functions
 ##############################################################
-f1 <- function(datos,x) x[1] + (1-x[1])*dbeta(datos, x[2], x[3])
-f2 <- function(datos,x) x[1] + x[2]*dbeta(datos, x[3], x[4]) + (1-x[1]-x[2])*dbeta(datos, x[5], x[6])
-f3 <- function(datos,x) x[1] + x[2]*dtriangle1(datos,x[3]) + (1-x[1]-x[2])*dtriangle2(datos,x[4])
-f4 <- function(datos,x) x[1] + x[2]*dexp1(datos,x[3]) + (1-x[1]-x[2])*dexp2(datos,x[4])
+f1 <- function(datos,x) x[1] + x[2]*dtriangle1(datos,x[3]) + (1-x[1]-x[2])*dtriangle2(datos,x[4])
+f2 <- function(datos,x) x[1] + x[2]*dexp1(datos,x[3]) + (1-x[1]-x[2])*dexp2(datos,x[4])
+f3 <- function(datos,x) x[1] + (1-x[1])*dbeta(datos, x[2], x[3])
+f4 <- function(datos,x) x[1] + x[2]*dbeta(datos, x[3], x[4]) + (1-x[1]-x[2])*dbeta(datos, x[5], x[6])
 
 ##############################################################
 # Distribution functions
 ##############################################################
-F1 <- function(d,x) x[1]*d + (1-x[1])*pbeta(d, x[2], x[3])
-F2 <- function(d,x) x[1]*d + x[2]*pbeta(d, x[3], x[4]) + (1-x[1]-x[2])*pbeta(d, x[5], x[6])
-F3 <- function(d,x){
+F1 <- function(d,x){
   n <- length(d)
   r <- c()
   for(i in 1:n){
@@ -255,4 +250,6 @@ F3 <- function(d,x){
   
   return(r)
 }
-F4 <- function(d,x) x[1]*d + x[2]*pexp(d,x[3])/(1-exp(-x[3])) + (1-x[1]-x[2])/(1-exp(-x[4]))*(exp(x[4]*(d-1)) - exp(-x[4]))
+F2 <- function(d,x) x[1]*d + x[2]*pexp(d,x[3])/(1-exp(-x[3])) + (1-x[1]-x[2])/(1-exp(-x[4]))*(exp(x[4]*(d-1)) - exp(-x[4]))
+F3 <- function(d,x) x[1]*d + (1-x[1])*pbeta(d, x[2], x[3])
+F4 <- function(d,x) x[1]*d + x[2]*pbeta(d, x[3], x[4]) + (1-x[1]-x[2])*pbeta(d, x[5], x[6])
