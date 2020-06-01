@@ -25,8 +25,8 @@ UL <- with(datos1,qf(0.975,final_cases_T1-1,final_cases_T2-1))
 p_values_BA <- data.frame(p_values_BA=pf(Fest,
                                          datos1$final_cases_T1-1,
                                          datos1$final_cases_T2-1))
-write.table(x = p_values_BA,file='../results_tables/SA_III_pvalues_BA.txt',
-            row.names = FALSE,col.names = TRUE,sep='\t')
+write.table(x = data.frame(p_values_BA=p_values_BA),file='../results_tables/SA_III_pvalues_BA.txt',
+            row.names = FALSE,col.names = TRUE,sep='\t',quote = FALSE)
 ##########################################################################
 ##-- Over time
 ##########################################################################
@@ -42,8 +42,8 @@ den <- var.paired.test(sdx,sdy,n,rho)[[3]]
 LL2 <- qt(0.025,n-2)
 UL2 <- qt(0.975,n-2)
 p_values_OT <- data.frame(p_values_OT=pt(Qest,n-2))
-write.table(x = p_values_OT,file='../results_tables/SA_III_pvalues_OT.txt',
-            row.names = FALSE,col.names = TRUE,sep='\t')
+write.table(x = data.frame(p_values_OT=p_values_OT),file='../results_tables/SA_III_pvalues_OT.txt',
+            row.names = FALSE,col.names = TRUE,sep='\t',quote = FALSE)
 
 #-----------------------------------------------------------------
 #
@@ -56,7 +56,7 @@ write.table(x = p_values_OT,file='../results_tables/SA_III_pvalues_OT.txt',
 ##-- Previous calculations
 y2 <- datos1$yBetweenArmsRatio                            # Between arms variance ratio
 w <- with(datos1,sqrt((final_cases_T1+final_cases_T2)))   # Uncertainty
-colbg <- 'grey80'                                         # color for background
+colbg <- 'grey90'                                         # color for background
 co1 <- 1:2                                                # color for points
 LL <- with(datos1,qf(0.025,final_cases_T1,final_cases_T2))# Lower limit
 UL <- with(datos1,qf(0.975,final_cases_T1,final_cases_T2))# Upper limit
