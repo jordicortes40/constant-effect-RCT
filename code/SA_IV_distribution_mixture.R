@@ -285,7 +285,7 @@ x <- seq(0,1,0.001)
 ##-- Uniform + Beta
 d1 <- data.frame(x=x,y=pmin(2,f1(x,ans1$par)))
 gg1 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
-  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
+  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
   xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Triangulars') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d1,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
@@ -296,7 +296,7 @@ gg1 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
 ##-- Uniform + 2 Betas
 d2 <- data.frame(x=x,y=pmin(2,f2(x,ans2$par)))
 gg2 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
-  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
+  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
   xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Exponentials') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d2,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
@@ -307,7 +307,7 @@ gg2 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
 ##-- Uniform + 2 Triangular
 d3 <- data.frame(x=x,y=pmin(2,f3(x,ans3$par)))
 gg3 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
-  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
+  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
   xlab('pvalues') + ylab('n') + labs(title='Uniform + Beta') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d3,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
@@ -318,7 +318,7 @@ gg3 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
 ##-- Uniform + 2 Exponentials
 d4 <- data.frame(x=x,y=pmin(2,f4(x,ans4$par)))
 gg4 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
-  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
+  scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
   xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Betas') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d4,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
