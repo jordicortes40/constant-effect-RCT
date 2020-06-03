@@ -1,4 +1,4 @@
-sink("../results_tables/MA_models.txt",split = TRUE)
+sink("../results_tables/MA_models.txt",split = FALSE)
 
 data <- datos1
 
