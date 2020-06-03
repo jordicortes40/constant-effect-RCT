@@ -173,8 +173,8 @@ myFunnel <- function(data,comparison,model,subgroup=NA,zoom=TRUE,xlab,...){
   }
 
   ##-- Plot region
-  graphics.off()
-  windows()
+  # graphics.off()
+  # windows()
   if(zoom){xmax <- max(abs(exp(x)));ymax <- 1.02;ymin <- 0.05}else{xmax <- 100;ymax <- 1.1;ymin <- 0}
   par(las=1)
   plot(x,y,pch=19,xlab='',col=0,xaxt='n',xlim=log(c(1/xmax,xmax)),ylim=c(ymax,ymin),main=tit,...)

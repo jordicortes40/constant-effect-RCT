@@ -57,7 +57,7 @@ myFunnel(datos1,comparison='Between arms',model=rma.unadj,
 
 
 ##-- Colors according to variance of treatment effect differences (n=208)
-png('../results_figures/MA_funnel_BA.png',width=1530,height = 1190)
+png('../results_figures/MA_funnel_BA.png',width=1530,height = 1190,res=144)
 myFunnel(datos1,comparison='Between arms',model=rma.unadj,
          subgroup='variance',zoom=FALSE,xlab=xl,ylab=yl)
 dev.off()
@@ -74,7 +74,7 @@ myFunnel(datos1,comparison='Over time',model=rma.unadj2,
          subgroup='effect',zoom=FALSE,xlab=xl,ylab=yl)
 
 ##-- Colors according to variance of treatment effect differences (n=95)
-png('../results_figures/MA_funnel_OT.png',width=1530,height = 1190)
+png('../results_figures/MA_funnel_OT.png',width=1530,height = 1190,res=144)
 myFunnel(datos1,comparison='Over time',model=rma.unadj2,
          subgroup='variance',zoom=FALSE,xlab=xl,ylab=yl)
 dev.off()
