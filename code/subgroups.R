@@ -66,28 +66,31 @@ lab2 <- c('Global',NA,'Significant',NA,NA,'Intervention type',NA,NA,
           'Measurement type',NA,NA)
 
 ##-- Between arms
-graphics.off()
-windows(10,7)
+png('../results_figures/MA_subgroup_analysis_BA.png',width=960,height = 670)
 myForest(M=M[[1]],xl=bquote(bold(frac(S[OT]^2,S[OC]^2))),lab1,lab2,
          tit='Between Arms - Subgroups',
          laxis1=c('in reference arm','in experimental arm'))
+dev.off()
 
 ##-- Over-time
-windows(10,7)
+png('../results_figures/MA_subgroup_analysis_OT.png',width=960,height = 670)
 myForest(M=M[[2]],xl=bquote(bold(frac(S[OT]^2,S[BT]^2))),lab1,lab2,
          tit='Over time - Subgroups',
          laxis1=c('at baseline','at the end of study'))
+dev.off()
 
 ##-- Between arms over-time
-windows(10,7)
+png('../results_figures/MA_subgroup_analysis_BA_OT.png',width=960,height = 670)
 myForest(M=M[[3]],xl=bquote(bold(frac(S[OT]^2/S[BT]^2,S[OC]^2/S[BC]^2))),lab1,lab2,
          tit='Change Over Time Between Arms - Subgroups',
          laxis1=c('in reference arm','in experimental arm'))
-
+dev.off()
 
 ##-- Mean by subgroups
+sink('../results_tables/MA_subgroup_means.txt',split = FALSE)
 with(datos1,tapply(yBetweenArmsRatio,significant,mean,na.rm=TRUE))
 with(datos1,tapply(yBetweenArmsRatio,Intervention_type,mean,na.rm=TRUE))
 with(datos1,tapply(yBetweenArmsRatio,Outcome_type,mean,na.rm=TRUE))
 with(datos1,tapply(yBetweenArmsRatio,Condition_type,mean,na.rm=TRUE))
 with(datos1,tapply(yBetweenArmsRatio,Measurement_type,mean,na.rm=TRUE))
+sink()

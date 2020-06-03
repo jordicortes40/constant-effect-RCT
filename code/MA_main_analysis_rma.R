@@ -14,6 +14,7 @@ source(paste0(URL,'code/read_data.R'))
 #     - On complete datasets
 #
 #-----------------------------------------------------------------
+##-- See file "../results_tables/MA_models.txt" for all the models
 source(paste0(URL,'code/rma_models.R'),local=TRUE)
 
 ##-- Confidence intervals for heterogeneity
