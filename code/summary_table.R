@@ -1,10 +1,5 @@
 rm(list=ls())
 
-quiet <- function(x) { 
-  sink(tempfile()) 
-  on.exit(sink()) 
-  invisible(force(x)) 
-} 
 #-----------------------------------------------------------------
 #
 # Read data
@@ -29,6 +24,6 @@ table1 <- matrix(c(MA_greater_BA,MA_lower_BA,MA_equal_BA,
                    SAI_greater_OT,SAI_lower_OT,SAI_equal_OT,
                    SAIII_greater_OT,SAIII_lower_OT,SAIII_equal_OT,
                    SAIV_greater_OT,SAIV_lower_OT,SAIV_equal_OT), # Lower and greater are heuristic in SA_IV,
-                 nrow=7,byrow=TRUE)
+                 nrow=9,byrow=TRUE)
 table1
 prop.table(table1,1)

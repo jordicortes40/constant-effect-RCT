@@ -1,0 +1,185 @@
+
+******************************************************************************************
+Reduced data --> Model 1 (Reference): log(Vbt/Vbc)~1 -------------------------------------
+******************************************************************************************
+
+Random-Effects Model (k = 204; tau^2 estimator: REML)
+
+tau^2 (estimated amount of total heterogeneity): 0.0043 (SE = 0.0054)
+tau (square root of estimated tau^2 value):      0.0658
+I^2 (total heterogeneity / total variability):   5.97%
+H^2 (total variability / sampling variability):  1.06
+
+Test for Heterogeneity:
+Q(df = 203) = 288.2610, p-val < .0001
+
+Model Results:
+
+estimate      se    zval    pval   ci.lb   ci.ub 
+  0.0428  0.0195  2.1976  0.0280  0.0046  0.0809  * 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
+
+******************************************************************************************
+Reduced data --> Model 2 (Between arms unadjusted): log(Vot/Voc)~1 -----------------------
+******************************************************************************************
+
+Random-Effects Model (k = 179; tau^2 estimator: REML)
+
+tau^2 (estimated amount of total heterogeneity): 0.0073 (SE = 0.0066)
+tau (square root of estimated tau^2 value):      0.0854
+I^2 (total heterogeneity / total variability):   9.30%
+H^2 (total variability / sampling variability):  1.10
+
+Test for Heterogeneity:
+Q(df = 178) = 185.0610, p-val = 0.3429
+
+Model Results:
+
+estimate      se     zval    pval    ci.lb   ci.ub 
+ -0.0134  0.0220  -0.6089  0.5426  -0.0564  0.0297    
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
+
+******************************************************************************************
+Reduced data --> Model 3 (Between arms adjusted): log(Vot/Voc)~ B?log(Vbt/Vbc)------------
+******************************************************************************************
+
+Mixed-Effects Model (k = 179; tau^2 estimator: REML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.0064 (SE = 0.0064)
+tau (square root of estimated tau^2 value):             0.0799
+I^2 (residual heterogeneity / unaccounted variability): 8.24%
+H^2 (unaccounted variability / sampling variability):   1.09
+R^2 (amount of heterogeneity accounted for):            12.54%
+
+Test for Residual Heterogeneity:
+QE(df = 177) = 168.4966, p-val = 0.6641
+
+Test of Moderators (coefficient 2):
+QM(df = 1) = 16.3691, p-val < .0001
+
+Model Results:
+
+                estimate      se     zval    pval    ci.lb   ci.ub 
+intrcpt          -0.0256  0.0219  -1.1655  0.2438  -0.0686  0.0174      
+yBaselineRatio    0.2882  0.0712   4.0459  <.0001   0.1486  0.4279  *** 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
+
+******************************************************************************************
+Reduced data --> Model 4 (Between arms with offset): log(Vot/Voc)~ 1?log(Vbt/Vbc)---------
+******************************************************************************************
+
+Random-Effects Model (k = 179; tau^2 estimator: REML)
+
+tau^2 (estimated amount of total heterogeneity): 0.0354 (SE = 0.0117)
+tau (square root of estimated tau^2 value):      0.1882
+I^2 (total heterogeneity / total variability):   33.23%
+H^2 (total variability / sampling variability):  1.50
+
+Test for Heterogeneity:
+Q(df = 178) = 277.4866, p-val < .0001
+
+Model Results:
+
+estimate      se     zval    pval    ci.lb    ci.ub 
+ -0.0602  0.0272  -2.2137  0.0268  -0.1135  -0.0069  * 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
+
+******************************************************************************************
+Reduced data --> Model 5 (Over time unadjusted): log(Voc/Vbt)~1 --------------------------
+******************************************************************************************
+
+Random-Effects Model (k = 67; tau^2 estimator: REML)
+
+tau^2 (estimated amount of total heterogeneity): 0.0188 (SE = 0.0098)
+tau (square root of estimated tau^2 value):      0.1370
+I^2 (total heterogeneity / total variability):   34.91%
+H^2 (total variability / sampling variability):  1.54
+
+Test for Heterogeneity:
+Q(df = 66) = 113.2003, p-val = 0.0003
+
+Model Results:
+
+estimate      se    zval    pval    ci.lb   ci.ub 
+  0.0203  0.0315  0.6451  0.5189  -0.0415  0.0821    
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
+
+******************************************************************************************
+Reduced data --> Model 6 (Over time adjusted): log(Vot/Vbt)~ B?log(Voc/Vbc) --------------
+******************************************************************************************
+
+Mixed-Effects Model (k = 67; tau^2 estimator: REML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.0062 (SE = 0.0064)
+tau (square root of estimated tau^2 value):             0.0786
+I^2 (residual heterogeneity / unaccounted variability): 15.02%
+H^2 (unaccounted variability / sampling variability):   1.18
+R^2 (amount of heterogeneity accounted for):            67.05%
+
+Test for Residual Heterogeneity:
+QE(df = 65) = 92.3357, p-val = 0.0145
+
+Test of Moderators (coefficient 2):
+QM(df = 1) = 19.4081, p-val < .0001
+
+Model Results:
+
+                 estimate      se     zval    pval    ci.lb   ci.ub 
+intrcpt           -0.0003  0.0269  -0.0121  0.9903  -0.0530  0.0523      
+yOverTimeRatioC    0.3457  0.0785   4.4055  <.0001   0.1919  0.4994  *** 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
+
+******************************************************************************************
+Reduced data --> Model 7 (Over time with offset): log(Vot/Vbt)~ 1?log(Voc/Vbc) -----------
+******************************************************************************************
+
+Random-Effects Model (k = 67; tau^2 estimator: REML)
+
+tau^2 (estimated amount of total heterogeneity): 0.0766 (SE = 0.0225)
+tau (square root of estimated tau^2 value):      0.2767
+I^2 (total heterogeneity / total variability):   68.64%
+H^2 (total variability / sampling variability):  3.19
+
+Test for Heterogeneity:
+Q(df = 66) = 174.0326, p-val < .0001
+
+Model Results:
+
+estimate      se     zval    pval    ci.lb   ci.ub 
+ -0.0400  0.0454  -0.8812  0.3782  -0.1290  0.0490    
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+-------------------------------------------------------------------------------------------
+
