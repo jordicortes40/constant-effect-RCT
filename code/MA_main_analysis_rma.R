@@ -117,6 +117,20 @@ cat('Studies with significative lower variance at the end of the study:',sum(low
 cat('Studies with significative greater variance at the end of the study:',sum(greater_var_OT,na.rm=TRUE),'\n')
 
 
+
+
+
+
+
+#-------------------------------------------------------------------
+#
+# Simulation: Compare the results from the delta method with 
+# empirical SE obtained by simulation
+#
+#-------------------------------------------------------------------
+source('SE_validation_BA.R')  # Between arms
+source('SE_validation_OT.R')  # Over-time
+
 #-----------------------------------------------------------------
 #
 # Combining two types of comparison
