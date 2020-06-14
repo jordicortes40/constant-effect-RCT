@@ -35,7 +35,6 @@ myForest <- function(M,xl='',lab1,lab2,tit='',laxis1=''){
   axis(1,at=tck,lab=ltck,font=4,cex.axis=0.9)
   
   ##-- Labels
-  lab2[1] <- paste0(lab2[1],' (n = 208)')
   mtext(lab2,2,at=ymax:1,line=12,font=2,cex=1,adj=0)
 
   ##-- Text for confidence intervals
