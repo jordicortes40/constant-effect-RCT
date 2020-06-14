@@ -52,6 +52,10 @@ for(v in var.sg){
   }
 }
 
+write.table(M,"../results_tables/MA_subgroup_analysis.txt",
+            col.names = TRUE,row.names = TRUE,
+            sep='\t',quote=FALSE)
+
 ############################################################
 # Forest-plot
 ############################################################
