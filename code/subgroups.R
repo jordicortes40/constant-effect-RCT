@@ -61,26 +61,26 @@ lab1 <- with(datos1,c(NA,NA,NA,levels(significant),NA,levels(Intervention_type),
                       NA,levels(Outcome_type),NA,levels(Condition_type)[1:2],
                       NA,levels(Measurement_type)))
 # Variables
-lab2 <- c('Global',NA,'Significant',NA,NA,'Intervention type',NA,NA,
+lab2 <- c('Global',NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
           'Outcome type',NA,NA,'Condition type*',NA,NA,
           'Measurement type',NA,NA)
 
 ##-- Between arms
-png('../results_figures/MA_subgroup_analysis_BA.png',width=960,height = 670,res=72)
+png('../results_figures/MA_subgroup_analysis_BA.png',width=960,height = 600,res=100)
 myForest(M=M[[1]],xl=bquote(bold(frac(S[OT]^2,S[OC]^2))),lab1,lab2,
          tit='Between Arms - Subgroups',
          laxis1=c('in reference arm','in experimental arm'))
 dev.off()
 
 ##-- Over-time
-png('../results_figures/MA_subgroup_analysis_OT.png',width=960,height = 670,res=72)
+png('../results_figures/MA_subgroup_analysis_OT.png',width=960,height = 600,res=100)
 myForest(M=M[[2]],xl=bquote(bold(frac(S[OT]^2,S[BT]^2))),lab1,lab2,
          tit='Over time - Subgroups',
          laxis1=c('at baseline','at the end of study'))
 dev.off()
 
 ##-- Between arms over-time
-png('../results_figures/MA_subgroup_analysis_BA_OT.png',width=960,height = 670,res=72)
+png('../results_figures/MA_subgroup_analysis_BA_OT.png',width=960,height = 600,res=100)
 myForest(M=M[[3]],xl=bquote(bold(frac(S[OT]^2/S[BT]^2,S[OC]^2/S[BC]^2))),lab1,lab2,
          tit='Change Over Time Between Arms - Subgroups',
          laxis1=c('in reference arm','in experimental arm'))
