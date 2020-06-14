@@ -45,8 +45,8 @@ for(v in var.sg){
     rma.Full2 <- rma(yBetweenArmsRatio-yBaselineRatio,sei=seBetweenArmsRatio,data=d2,method='REML')       ##-- Full (adjusted)
     
     M[[1]][row+1,] <- c(exp(c(coef(rma.Arms2)[1],rma.Arms2$ci.lb[1],rma.Arms2$ci.ub[1])),nrow(d2))
-    M[[2]][row+1,] <- c(exp(c(coef(rma.Time2)[1],rma.Time2$ci.lb[1],rma.Time2$ci.ub[1])),nrow(d2))
-    M[[3]][row+1,] <- c(exp(c(coef(rma.Full2)[1],rma.Full2$ci.lb[1],rma.Full2$ci.ub[1])),nrow(d2))
+    M[[2]][row+1,] <- c(exp(c(coef(rma.Time2)[1],rma.Time2$ci.lb[1],rma.Time2$ci.ub[1])),sum(!is.na(d2$seOverTimeRatioT)))
+    M[[3]][row+1,] <- c(exp(c(coef(rma.Full2)[1],rma.Full2$ci.lb[1],rma.Full2$ci.ub[1])),sum(!is.na(d2$seOverTimeRatioT)))
     
     if(!is.na(v)){for(i in 1:3) rownames(M[[i]])[row+1] <- levels(d1[,v])[2]}else{for(i in 1:3) rownames(M[[i]])[row+1] <- ''}
   }
