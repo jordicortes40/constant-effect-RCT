@@ -305,3 +305,41 @@ QLIM <- function(Qx,Qy,Qxy,n){
 }
 QLIM1 <- function(Qx,Qy,Qxy,n) QLIM(Qx,Qy,Qxy,n)[1]
 QLIM2 <- function(Qx,Qy,Qxy,n) QLIM(Qx,Qy,Qxy,n)[2]
+
+####################################################################
+# f_kendall_tau_BA. Estimate the kendall tau from a random effect 
+# model (REM) in between arm comparison. Used to bootstraped to get 
+# the standard error of this statistic 
+#
+# ind: array with rows to bootstrap
+# data: required data to fit the REM
+####################################################################
+f_kendall_tau_BA <- function(ind,data){
+  model <- rma(y=yBetweenArmsRatio,
+               sei=seBetweenArmsRatio,
+               data=data[ind,],mods=~yBaselineRatio,method='REML')
+  return(ranktest(model)$tau)
+}
+
+####################################################################
+# f_kendall_tau_BA. Estimate the kendall tau from a random effect 
+# model (REM) in comparison over time. Used to bootstraped to get 
+# the standard error of this statistic 
+#
+# ind: array with rows to bootstrap
+# data: required data to fit the REM
+####################################################################
+f_kendall_tau_OT <- function(ind,data){
+  model <- rma(y=yOverTimeRatioT,
+               sei=seOverTimeRatioT,
+               data=data[ind,],mods=~yOverTimeRatioC,method='REML')
+  return(ranktest(model)$tau)
+}
+
+####################################################################
+# ff. format a number with a fixed number of decimal digits 
+#
+# x: number
+# digits: numer of decimal digits
+####################################################################
+ff <- function(x,digits=3) formatC(x,digits=digits,format='f')

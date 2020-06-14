@@ -28,7 +28,23 @@ confint(rma.unadj2) # Heterogeneity over time in unadjusted model
 confint(rma.adj2)   # Heterogeneity over time in adjusted model
 confint(rma.adjoff2)# Heterogeneity between arms in model with offset (beta=1)
 
-##-- Test for assymmetries in the funnel plot
+##-- Test for asymmetries in the funnel plot
+boot_data <- datos1[,c('yBetweenArmsRatio','seBetweenArmsRatio','yBaselineRatio',
+                       'yOverTimeRatioT','seOverTimeRatioT','yOverTimeRatioC')]
+t0 <- Sys.time()
+boot_res_BA <- bootstrap(1:208,nboot = 1000,theta=f_kendall_tau_BA,data=boot_data)
+boot_res_OT <- bootstrap(1:208,nboot = 1000,theta=f_kendall_tau_OT,data=boot_data)
+t1 <- Sys.time()-t0
+
+# Results from bootstrap
+boot_tau_BA <- boot_res_BA$thetastar
+boot_tau_OT <- boot_res_OT$thetastar
+
+cat("Kendall's tau statistic for between arms comparison was:",ff(mean(boot_tau_BA)),
+    "95% CI from",ff(quantile(boot_tau_BA,0.025)),"to",ff(quantile(boot_tau_BA,0.975)),"\n")
+cat("Kendall's tau statistic for comparison over time was:",ff(mean(boot_tau_OT)),
+    "95% CI from",ff(quantile(boot_tau_OT,0.025)),"to",ff(quantile(boot_tau_OT,0.975)),"\n")
+
 ranktest(rma.adj)
 ranktest(rma.adj2)
 
