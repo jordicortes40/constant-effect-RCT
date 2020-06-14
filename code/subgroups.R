@@ -28,7 +28,7 @@ for(v in var.sg){
   
   rma.Arms1 <- rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=d1,mods=~yBaselineRatio,method='REML') ##-- Between arms (adjusted)
   rma.Time1 <- rma(yOverTimeRatioT,sei=seOverTimeRatioT,data=d1,mods=~yOverTimeRatioC,method='REML')    ##-- Over Time (adjusted)
-  rma.Full1 <- rma(yBetweenArmsRatio-yBaselineRatio,sei=seBetweenArmsRatio,data=d1,method='REML')       ##-- Full (adjusted)
+  rma.Full1 <- rma(yBetweenArmsRatio-yBaselineRatio,sei=sqrt(seOverTimeRatioT^2 + seBetweenArmsRatio^2),data=d1,method='REML')       ##-- Full (adjusted)
   
   ##-- Store data
   row <- ifelse(is.na(v),1,2*which(var.sg==v)-2)
