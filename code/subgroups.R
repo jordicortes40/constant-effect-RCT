@@ -34,8 +34,8 @@ for(v in var.sg){
   row <- ifelse(is.na(v),1,2*which(var.sg==v)-2)
   
   M[[1]][row,] <- c(exp(c(coef(rma.Arms1)[1],rma.Arms1$ci.lb[1],rma.Arms1$ci.ub[1])),nrow(d1))
-  M[[2]][row,] <- c(exp(c(coef(rma.Time1)[1],rma.Time1$ci.lb[1],rma.Time1$ci.ub[1])),nrow(d1))
-  M[[3]][row,] <- c(exp(c(coef(rma.Full1)[1],rma.Full1$ci.lb[1],rma.Full1$ci.ub[1])),nrow(d1))
+  M[[2]][row,] <- c(exp(c(coef(rma.Time1)[1],rma.Time1$ci.lb[1],rma.Time1$ci.ub[1])),sum(!is.na(d1$seOverTimeRatioT)))
+  M[[3]][row,] <- c(exp(c(coef(rma.Full1)[1],rma.Full1$ci.lb[1],rma.Full1$ci.ub[1])),sum(!is.na(d1$seOverTimeRatioT)))
   
   if(!is.na(v)){for(i in 1:3) rownames(M[[i]])[row] <- levels(d1[,v])[1]}else{for(i in 1:3) rownames(M[[i]])[row] <- ''}
   
@@ -61,29 +61,32 @@ lab1 <- with(datos1,c(NA,NA,NA,levels(significant),NA,levels(Intervention_type),
                       NA,levels(Outcome_type),NA,levels(Condition_type)[1:2],
                       NA,levels(Measurement_type)))
 # Variables
-lab2 <- c('Global',NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
+lab2_BA <- c('Global (n=208)',NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
+          'Outcome type',NA,NA,'Condition type*',NA,NA,
+          'Measurement type',NA,NA)
+lab2_OT <- c('Global (n=95)',NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
           'Outcome type',NA,NA,'Condition type*',NA,NA,
           'Measurement type',NA,NA)
 
 ##-- Between arms
 png('../results_figures/MA_subgroup_analysis_BA.png',width=960,height = 600,res=100)
-myForest(M=M[[1]],xl=bquote(bold(S[OT]^2/S[OC]^2)),lab1,lab2,
+myForest(M=M[[1]],xl=bquote(bold(S[OT]^2/S[OC]^2)),lab1,lab2_BA,
          tit='Between Arms - Subgroup analysis',
          laxis1=c('in reference arm','in experimental arm'))
 dev.off()
 
 ##-- Over-time
 png('../results_figures/MA_subgroup_analysis_OT.png',width=960,height = 600,res=100)
-myForest(M=M[[2]],xl=bquote(bold(S[OT]^2/S[BT]^2)),lab1,lab2,
+myForest(M=M[[2]],xl=bquote(bold(S[OT]^2/S[BT]^2)),lab1,lab2_OT,
          tit='Over time - Subgroup analysis',
          laxis1=c('at baseline','at the end of study'))
 dev.off()
 
 ##-- Between arms over-time
 png('../results_figures/MA_subgroup_analysis_BA_OT.png',width=960,height = 600,res=100)
-myForest(M=M[[3]],xl=bquote(bold(frac(S[OT]^2/S[BT]^2,S[OC]^2/S[BC]^2))),lab1,lab2,
+myForest(M=M[[3]],xl=bquote(bold(frac(S[OT]^2/S[BT]^2,S[OC]^2/S[BC]^2))),lab1,lab2_OT,
          tit='Change over time between arms - Subgroup analysis',
-         laxis1=c('in reference arm','in experimental arm'))
+         laxis1=c('in control group','in treated group'))
 dev.off()
 
 ##-- Mean by subgroups

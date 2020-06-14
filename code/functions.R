@@ -49,7 +49,7 @@ myForest <- function(M,xl='',lab1,lab2,tit='',laxis1=''){
     }
   }
   mtext(expression(bold(hat(bold('\u03BC')))),4,at=ymax+2.25,cex=1,adj=1,line=3.6)
-  mtext(' [CI95%]',4,at=ymax+2.25,cex=1,adj=0,line=4,font=2)
+  mtext(' [95%CI]',4,at=ymax+2.25,cex=1,adj=0,line=4,font=2)
 
   ##-- Rectangle for overall estimation
   x0 <- c(M[1,2],M[1,1],M[1,3],M[1,1])
