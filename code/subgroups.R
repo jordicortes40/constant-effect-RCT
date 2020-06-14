@@ -76,7 +76,7 @@ lab2_OT <- c('Global (n=95)',NA,'Intervention efficacy',NA,NA,'Intervention type
 png('../results_figures/MA_subgroup_analysis_BA.png',width=960,height = 600,res=100)
 myForest(M=M[[1]],xl=bquote(bold(S[OT]^2/S[OC]^2)),lab1,lab2_BA,
          tit='Between Arms - Subgroup analysis',
-         laxis1=c('in reference arm','in experimental arm'))
+         laxis1=c('in control group','in treated group'))
 dev.off()
 
 ##-- Over-time
