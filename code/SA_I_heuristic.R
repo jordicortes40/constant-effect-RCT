@@ -161,19 +161,21 @@ V2 <- V1                         # Variances in control group=treated group
 ####################################################################
 ##-- Generate data under no differences in variances (V2=V1)
 set.seed(12345)
-M <- matrix(ncol=3,nrow=nsim)
+M <- matrix(ncol=4,nrow=nsim)
 for (i in 1:nsim){
   est <- c()
-  cat('i:',i,'/',nsim,'\n')                     # Print iteration
+  cat('iteration:',i,'/',nsim,'\n')                          # Print iteration
   for(j in 1:208){
-    y01 <- rnorm(N1[j],0,sqrt(V1[j]))           # Generate normal data for one arm
-    y02 <- rnorm(N2[j],0,sqrt(V1[j]))           # Generate normal data for the other arm
-    est[j] <- log(var(y01)/var(y02))            # Response
+    y01 <- rnorm(N1[j],0,sqrt(V1[j]))                # Generate normal data for one arm
+    y02 <- rnorm(N2[j],0,sqrt(V1[j]))                # Generate normal data for the other arm
+    est[j] <- log(var(y01)/var(y02))                 # Response
   }
-  try(rma.model <- rma(yi=est,vi=2/(N1-2)+2/(N2-2)))
-  M[i,] <- c(coef(rma.model)[1],sqrt(rma.model$tau2),rma.model$I2)
+  try(rma.model <- rma(yi=est,vi=2/(N1-2)+2/(N2-2))) # Random effect model
+  LL <- est - 1.96*sqrt(2/(N1-2)+2/(N2-2))           # Lower limit for each single study  
+  UL <- est + 1.96*sqrt(2/(N1-2)+2/(N2-2))           # Upper limit for each single study  
+  M[i,] <- c(coef(rma.model)[1],sqrt(rma.model$tau2),rma.model$I2,sum(LL>0 | UL<0)/208)
 }
-colnames(M) <- c('mu','tau','I2')
+colnames(M) <- c('mu','tau','I2','p') # p: proportion of studies in each iteration whose confidence intervals does not contain 0
 summary(M)
 dd <- as.data.frame(M)
 write.table(x = dd,file='../results_tables/SA_I_simulated_data_under_H0.txt',
@@ -182,14 +184,14 @@ write.table(x = dd,file='../results_tables/SA_I_simulated_data_under_H0.txt',
 
 ##-- Boxplots for the three parameters (mu, tau, I2) in all the simulations:
 rma.unadjB <- rma(yBaselineRatio,sei=seBaselineRatio,data=datos1)  
-rma.unadj <-   rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=datos1,method='REML')              # Adjusted by baseline
-rma.adj <-   rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=datos1,mods=~yBaselineRatio,method='REML')              # Adjusted by baseline
+rma.unadj  <-   rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=datos1,method='REML')              # Adjusted by baseline
+rma.adj    <-   rma(yBetweenArmsRatio,sei=seBetweenArmsRatio,data=datos1,mods=~yBaselineRatio,method='REML')              # Adjusted by baseline
 REAL.BASELINE <- c(rma.unadjB$beta[1],sqrt(rma.unadjB$tau2),rma.unadjB$I2)
-REAL.FINAL <- c(rma.unadj$beta[1],sqrt(rma.unadj$tau2),rma.unadj$I2)
+REAL.FINAL    <- c(rma.unadj$beta[1], sqrt(rma.unadj$tau2), rma.unadj$I2)
 
 ##-- Graphical parameters
-cols <- c("BASELINE"="blue","OUTCOME"="red")         # Colors
-sha <- c("BASELINE"=3,"OUTCOME"=4)                   # Shapes
+cols <- c("BASELINE"="blue","OUTCOME"="red")         # Colors for the plot
+sha <- c("BASELINE"=3,"OUTCOME"=4)                   # Shapes for the plot
 
 # Common theme
 common.theme <- theme(axis.text.x = element_blank(),
