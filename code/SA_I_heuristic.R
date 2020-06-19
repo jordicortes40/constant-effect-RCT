@@ -181,6 +181,9 @@ dd <- as.data.frame(M)
 write.table(x = dd,file='../results_tables/SA_I_simulated_data_under_H0.txt',
             row.names = FALSE,col.names = TRUE,sep='\t')
 
+## Quantiles
+round(t(apply(dd[,1:3],2,quantile,probs=seq(0,1,0.1))),2)
+
 
 ##-- Boxplots for the three parameters (mu, tau, I2) in all the simulations:
 rma.unadjB <- rma(yBaselineRatio,sei=seBaselineRatio,data=datos1)  
