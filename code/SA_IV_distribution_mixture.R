@@ -222,9 +222,9 @@ P0 = c(0.4, 1, 1)
 ans3 = auglag(par=P0, fn=fn3, heq=heq3,hin=hin3, hin.jac=hin.jac3, control.outer=list(trace=FALSE), var=var)
 
 ##-- Uniform + 2 Betas
-P0 = c(0.4, 0.3, 1, 1, 1, 1)
+P0 = c(0.4, 0.2, 1, 1, 1, 1)
 ans4 = auglag(par=P0, fn=fn4, heq=heq4,hin=hin4, hin.jac=hin.jac4, control.outer=list(trace=FALSE), var=var)
-
+ans4$par
 
 ##############################################################
 # Check distributions using a QQplot
@@ -336,9 +336,9 @@ ggsave(filename = '../results_figures/SA_IV_histograms_OT.jpg',width=8,height=8)
 #
 #-----------------------------------------------------------------
 ##-- Over time (1 beta)
-p_equal_OT <- ans3$par[1]
-p_greater_OT <- (1-p_equal_OT)*(ans3$par[2]/(ans3$par[2]+ans3$par[3])) # heuristic
-p_lower_OT <- (1-p_equal_OT)*(ans3$par[3]/(ans3$par[2]+ans3$par[3])) # heuristic
+p_equal_OT <- ans4$par[1]
+p_greater_OT <- ans4$par[2]
+p_lower_OT <- (1-p_greater_OT-p_equal_OT)
 SAIV_greater_OT <- round(nrow(d)*p_greater_OT)
 SAIV_lower_OT <- round(nrow(d)*p_lower_OT)
 SAIV_equal_OT <- round(nrow(d)*p_equal_OT)
