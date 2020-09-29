@@ -66,7 +66,8 @@ fit <- data.frame(x=x,
                   fit1=F1(x,ans1$par),fit2=F2(x,ans2$par),
                   fit3=F3(x,ans3$par),fit4=F4(x,ans4$par))
 common_theme <- theme(axis.text = element_text(face='bold',size=10),
-                      axis.title = element_text(face='bold',size=13) )
+                      axis.title = element_text(face='bold',size=13),
+                      title = element_text(face='bold',size = 15))
 gg1 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") + 
   geom_line(data = fit,mapping=aes(x=x,y=fit1),size=1,col='darkblue',alpha=0.5) +
   ggtitle('Uniform + 2 Triangular') + xlab('p values') + ylab(expression(F[n](x))) +
@@ -99,7 +100,7 @@ ggsave(filename = '../results_figures/SA_IV_qqplots_BA.jpg',width=8,height=8)
 ##############################################################
 par(las=1,mfrow=c(2,2))
 RES <- rbind(results(d[,1],ans1,nparam=4,F1,f1,'Uniform + 2 Triangular'),
-             results(d[,1],ans2,nparam=4,F2,f2,'Uniform + 2 Exponentials'),
+             results(d[,1],ans2,nparam=4,F2,f2,'Uniform + 2 Exponential'),
              results(d[,1],ans3,nparam=3,F3,f3,'Uniform + Beta'),
              results(d[,1],ans4,nparam=6,F4,f4,'Uniform + 2 Betas'))
 colnames(RES) <- c('nparam','LL','AIC','KS1','KS2','pu','95%LL(pu)','95%UL(pu)','max_f(x)','iterations')
@@ -114,29 +115,29 @@ write.table(x = as.data.frame(RES),
 ## Points to assess
 x <- seq(0,1,0.001)
 
-##-- Uniform + Beta
+##-- Uniform + 2 Triangular
 d1 <- data.frame(x=x,y=pmin(2,f1(x,ans1$par)))
 gg1 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
-  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Triangulars') +
+  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Triangular') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d1,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
   theme(axis.title = element_text(face='bold',size = 13),
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 
-##-- Uniform + 2 Betas
+##-- Uniform + 2 Exponentials
 d2 <- data.frame(x=x,y=pmin(2,f2(x,ans2$par)))
 gg2 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
-  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Exponentials') +
+  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Exponential') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d2,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
   theme(axis.title = element_text(face='bold',size = 13),
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 
-##-- Uniform + 2 Triangular
+##-- Uniform + Beta
 d3 <- data.frame(x=x,y=pmin(2,f3(x,ans3$par)))
 gg3 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
@@ -147,7 +148,7 @@ gg3 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 
-##-- Uniform + 2 Exponentials
+##-- Uniform + 2 Betas
 d4 <- data.frame(x=x,y=pmin(2,f4(x,ans4$par)))
 gg4 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,2)) + 
@@ -233,8 +234,6 @@ x <- seq(0,1,0.001)
 fit <- data.frame(x=x,
                   fit1=F1(x,ans1$par),fit2=F2(x,ans2$par),
                   fit3=F3(x,ans3$par),fit4=F4(x,ans4$par))
-common_theme <- theme(axis.text = element_text(face='bold',size=10),
-                      axis.title = element_text(face='bold',size=13) )
 gg1 <- ggplot(d, aes(x=p_values)) + stat_ecdf(geom = "step") + 
   geom_line(data = fit,mapping=aes(x=x,y=fit1),size=1,col='darkblue',alpha=0.5) +
   ggtitle('Uniform + 2 Triangular') + xlab('p values') + ylab(expression(F[n](x))) +
@@ -282,29 +281,29 @@ write.table(x = as.data.frame(RES),
 ## Points to assess
 x <- seq(0,1,0.001)
 
-##-- Uniform + Beta
+##-- Uniform + 2 Triangular
 d1 <- data.frame(x=x,y=pmin(2,f1(x,ans1$par)))
 gg1 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
-  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Triangulars') +
+  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Triangular') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d1,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
   theme(axis.title = element_text(face='bold',size = 13),
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 
-##-- Uniform + 2 Betas
+##-- Uniform + 2 Exponentials
 d2 <- data.frame(x=x,y=pmin(2,f2(x,ans2$par)))
 gg2 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
-  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Exponentials') +
+  xlab('pvalues') + ylab('n') + labs(title='Uniform + 2 Exponential') +
   geom_hline(yintercept = 1,col='grey10',linetype=2,size=1.2) +
   geom_ribbon(data=d2,mapping=aes(x=x,ymax=y),ymin=0,fill='red',alpha=0.3) +
   theme(axis.title = element_text(face='bold',size = 13),
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 
-##-- Uniform + 2 Triangular
+##-- Uniform + Beta
 d3 <- data.frame(x=x,y=pmin(2,f3(x,ans3$par)))
 gg3 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 
@@ -315,7 +314,7 @@ gg3 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white'
         axis.text = element_text(face='bold',size = 10),
         title = element_text(face='bold',size = 15))
 
-##-- Uniform + 2 Exponentials
+##-- Uniform + 2 Betas
 d4 <- data.frame(x=x,y=pmin(2,f4(x,ans4$par)))
 gg4 <- ggplot(d,aes(x=p_values)) + geom_histogram(aes(y=..density..),col='white',bins=10,breaks=seq(-0.1,1,0.1),fill=rgb(0.1992188,0.1992188,0.6953125,maxColorValue = 1)) + 
   scale_x_continuous(limits=c(0,1)) + scale_y_continuous(limits=c(0,3)) + 

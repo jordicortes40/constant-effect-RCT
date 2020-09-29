@@ -185,21 +185,20 @@ ggplot(df4,aes(x=prop_random,y=value,color=stat)) +
 #
 # Simulation under main scenario:
 # - All Additive effect with (100xpi_r)% Random and 100*(1-pi_r)% Fixed
-# - Narrow window: Theta from 6.5 to 7.5 and pi_r from 0 to 0.20
+# - Narrow window: Theta from 6.5 to 7.5 and pi_r from 0.05 to 0.15 with intervals of 0.01
 #-----------------------------------------------------------------
 ##-- Parameters
-THETA_MAX <- seq(6.5,7.5,0.2)    # theta=sigma_C/sigma_T; theta_max = max(theta)
-PROP_RANDOM <- seq(0,0.2,0.02)   # proportion of studies with random treatment effect
-DELTA_C <- 0                     # Change in controls over time
-DELTA_T <- 0                     # Change in treated over time 
-EFFECT <- DELTA_T - DELTA_C      # Effect
-nsim <- 100                      # number of simulations
+THETA_MAX <- seq(6.5,7.5,0.1)       # theta=sigma_C/sigma_T; theta_max = max(theta)
+PROP_RANDOM <- seq(0.05,0.15,0.01)  # proportion of studies with random treatment effect
+DELTA_C <- 0                        # Change in controls over time
+DELTA_T <- 0                        # Change in treated over time 
+EFFECT <- DELTA_T - DELTA_C         # Effect
+nsim <- 100                         # number of simulations
 
-##-- Martix to store the results
-M <- matrix(nrow=nsim*length(THETA_MAX)*length(PROP_RANDOM),ncol=9)
+##-- Matrix to store the results
+M <- matrix(nrow=nsim*length(THETA_MAX)*length(PROP_RANDOM),ncol=6)
 colnames(M) <- c('theta','prop_random','iteration',
-                 'mu','tau','I2',        # Between arms
-                 'mu_2','tau_2','I2_2')  # Over time
+                 'mu','tau','I2')
 
 ##-- Simulations
 set.seed(12345)
@@ -208,7 +207,7 @@ for(pa in PROP_RANDOM){
   for(theta in THETA_MAX){
     for(k in 1:nsim){
       y <- se <- yBaselineRatio <- c()
-      y2 <- se2 <- yControlRatio <- c()
+      # y2 <- se2 <- yControlRatio <- c()
       
       ##-- Generate data for each single study
       for(j in 1:N){
@@ -233,12 +232,12 @@ for(pa in PROP_RANDOM){
         se[j] <- sqrt(2/(n_treat[j]-2) + 2/(n_ctrl[j]-2))                    # within standard error of the response
         
         # Over time comparison
-        y2[j] <- log(var(y_ot)/var(y_bt))                                    # response of the model
-        yControlRatio[j] <- log(var(y_oc)/var(y_bc))                         # response of the model at baseline
-        se2[j] <- sqrt(2/(n_treat[j]-2) + 
-                         2/(n_treat[j]-2) - 
-                         2*log(1 + 2*cor(y_ot,y_bt)^2/(n_treat[j]-1)))       # within standard error of the response
-        
+        # y2[j] <- log(var(y_ot)/var(y_bt))                                    # response of the model
+        # yControlRatio[j] <- log(var(y_oc)/var(y_bc))                         # response of the model at baseline
+        # se2[j] <- sqrt(2/(n_treat[j]-2) + 
+        #                  2/(n_treat[j]-2) - 
+        #                  2*log(1 + 2*cor(y_ot,y_bt)^2/(n_treat[j]-1)))       # within standard error of the response
+        # 
         
       }
       
@@ -247,9 +246,9 @@ for(pa in PROP_RANDOM){
       mod <- try(rma(y,sei=se,data=data,mods=~yBaselineRatio,method='REML'),silent=TRUE) # fit the model                                     
       
       # Over time
-      data2 <- data.frame(y=y2,se=se2,yBaselineRatio=yControlRatio)                        # data to fit the model
-      mod2 <- try(rma(y2,sei=se2,data=data2,mods=~yControlRatio,method='REML'),silent=TRUE) # fit the model                                     
-      
+      # data2 <- data.frame(y=y2,se=se2,yBaselineRatio=yControlRatio)                        # data to fit the model
+      # mod2 <- try(rma(y2,sei=se2,data=data2,mods=~yControlRatio,method='REML'),silent=TRUE) # fit the model                                     
+      # 
       
       M[rowi,1] <- theta                     # THETA_MAX                            
       M[rowi,2] <- pa                        # proportion of random studies
@@ -265,15 +264,15 @@ for(pa in PROP_RANDOM){
         cat('Fisher scoring algorithm did not converge in between arms comparison.\n')
       }
       
-      # Over time
-      if(class(mod2)[1]!="try-error"){
-        ##-- Store results
-        M[rowi,7] <- as.numeric(mod2$beta[1,1]) # coefficient that estimates log(mu)
-        M[rowi,8] <- sqrt(mod2$tau2)            # estimate of tau^2 
-        M[rowi,9] <- mod2$I2                    # estimate of I^2 
-      }else{
-        cat('Fisher scoring algorithm did not converge in over time comparison.\n')
-      }
+      # # Over time
+      # if(class(mod2)[1]!="try-error"){
+      #   ##-- Store results
+      #   M[rowi,7] <- as.numeric(mod2$beta[1,1]) # coefficient that estimates log(mu)
+      #   M[rowi,8] <- sqrt(mod2$tau2)            # estimate of tau^2 
+      #   M[rowi,9] <- mod2$I2                    # estimate of I^2 
+      # }else{
+      #   cat('Fisher scoring algorithm did not converge in over time comparison.\n')
+      # }
       
       ##-- Update indicator
       rowi <- rowi+1
@@ -289,7 +288,7 @@ summary(M)
 dfM <- as.data.table(M)
 SIMULATED.FINAL <- dfM[,.(mu=mean(mu,na.rm=TRUE),tau=mean(tau,na.rm=TRUE),I2=mean(I2,na.rm=TRUE)),by=.(theta,prop_random)]
 SIMULATED.FINAL
-SIMULATED.FINAL[,MSE:=sum((SIMULATED.FINAL[,.(mu,tau,I2)] - REAL.FINAL)^2)/3]   # Mean Square Error
+SIMULATED.FINAL[,MSE:=apply(apply(apply(SIMULATED.FINAL[,.(mu,tau,I2=I2/100)],1,"-",REAL.FINAL),2,"^",2),2,sum)/3]   # Mean Square Error
 SIMULATED.FINAL[which.min(MSE),]
 
 ##-- Store the data
@@ -304,7 +303,7 @@ write.table(x = df,file='../results_tables/SA_II_simulated_data_narrow_window.tx
 #-----------------------------------------------------------------
 ##-- Between arms
 PI_R <- 0.10
-THETA_M <- 7
+THETA_M <- 7.2
 p_greater_BA <- PI_R*1/THETA_M
 p_lower_BA <- PI_R*(THETA_M-1)/THETA_M
 SAII_greater_BA <- round(p_greater_BA*nrow(datos1))
