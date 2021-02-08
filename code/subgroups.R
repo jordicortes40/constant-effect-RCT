@@ -65,11 +65,11 @@ write.table(M,"../results_tables/MA_subgroup_analysis.txt",
 lab1 <- with(datos1,c(NA,NA,NA,levels(significant),NA,levels(Intervention_type),
                       NA,levels(Outcome_type),NA,levels(Condition_type)[1:2],
                       NA,levels(Measurement_type),
-                      NA,levels(Improvement)))
+                      NA,'Downwards','Upwards'))
 # Variables
 lab2 <- c(NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
           'Outcome type',NA,NA,'Condition type*',NA,NA,
-          'Measurement type',NA,NA,'Improvement direction',NA,NA)
+          'Measurement type',NA,NA,'Improvement',NA,NA)
 lab2_BA <- c('Global (n=208)',lab2)
 lab2_OT <- c('Global (n=95)',lab2)
 
