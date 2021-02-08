@@ -8,10 +8,11 @@
 ############################################################
 
 ##-- Subgroup names
-var.sg <- c(NA,'significant','Intervention_type','Outcome_type','Condition_type','Measurement_type')
+var.sg <- c(NA,'significant','Intervention_type','Outcome_type','Condition_type','Measurement_type','Improvement')
+n_intervals <- 2*(length(var.sg)-1) + 1
 
 ##-- Objects for storing information
-m <- matrix(nrow=11,ncol=4,dimnames = list(1:11,c('Ratio','LL_CI95','UL_CI95','n')))
+m <- matrix(nrow=n_intervals,ncol=4,dimnames = list(1:n_intervals,c('Ratio','LL_CI95','UL_CI95','n')))
 M <- list(BetweenArms=m,Overtime=m,Full=m)
 
 ##-- Estimate data for forest-plots
@@ -63,14 +64,14 @@ write.table(M,"../results_tables/MA_subgroup_analysis.txt",
 # Levels
 lab1 <- with(datos1,c(NA,NA,NA,levels(significant),NA,levels(Intervention_type),
                       NA,levels(Outcome_type),NA,levels(Condition_type)[1:2],
-                      NA,levels(Measurement_type)))
+                      NA,levels(Measurement_type),
+                      NA,levels(Improvement)))
 # Variables
-lab2_BA <- c('Global (n=208)',NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
+lab2 <- c(NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
           'Outcome type',NA,NA,'Condition type*',NA,NA,
-          'Measurement type',NA,NA)
-lab2_OT <- c('Global (n=95)',NA,'Intervention efficacy',NA,NA,'Intervention type',NA,NA,
-          'Outcome type',NA,NA,'Condition type*',NA,NA,
-          'Measurement type',NA,NA)
+          'Measurement type',NA,NA,'Improvement direction',NA,NA)
+lab2_BA <- c('Global (n=208)',lab2)
+lab2_OT <- c('Global (n=95)',lab2)
 
 ##-- Between arms
 png('../results_figures/MA_subgroup_analysis_BA.png',width=960,height = 600,res=100)

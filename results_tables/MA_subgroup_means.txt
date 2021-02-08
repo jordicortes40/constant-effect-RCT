@@ -1,0 +1,10 @@
+         No         Yes 
+-0.05227675 -0.20981982 
+Non-Pharmacological     Pharmacological 
+        -0.09753295         -0.14012348 
+   Measured      Scored 
+-0.05887133 -0.21493003 
+      Acute     Chronic        None 
+-0.07908682 -0.10604757 -0.22835385 
+   Assessed   Automatic 
+-0.24496415 -0.02894092 

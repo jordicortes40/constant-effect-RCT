@@ -16,17 +16,17 @@ myForest <- function(M,xl='',lab1,lab2,tit='',laxis1=''){
              N,M[4:5,],
              N,M[6:7,],
              N,M[8:9,],
-             N,M[10:11,])
+             N,M[10:11,],
+             N,M[12:13,])
   
   ##-- Plot region
   ymax <- length(lab1)
   xmax <- 2
   par(las=1,mar=c(5,12,5,10))
-  plot(NA,ylim=c(0.5,ymax+.5),xlim=c(1/xmax,xmax),bty='n',yaxt='n',ylab='',xlab='',log='x',xaxt='n',main=tit,
-       xaxs='i')
+  plot(NA,ylim=c(0.5,ymax+.5),xlim=c(1/xmax,xmax),bty='n',yaxt='n',ylab='',xlab='',log='x',xaxt='n',main=tit,xaxs='i')
   par(xpd=NA)
-  rect(0.001,seq(ymax-1.5,3.5,-6),1000,seq(ymax-4.5,.5,-6),border=NA,col='grey90')
-  rect(0.001,seq(ymax-4.5,6.5,-6),1000,seq(ymax-7.5,3.5,-6),border=NA,col='grey80')
+  rect(0.001,seq(ymax-1.5,3.5,-6),1000,seq(ymax-4.5,0.5,-6),border=NA,col='grey90')
+  rect(0.001,seq(ymax-4.5,0.5,-6),1000,seq(ymax-7.5,-2.5,-6),border=NA,col='grey80')
   rect(0.001,ymax+1,1000,ymax-1.5,border=NA,col='grey80')
   par(xpd=FALSE)
   tck <- ltck <- round(exp(seq(log(0.5),log(2),le=11)),1)
