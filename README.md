@@ -1,7 +1,5 @@
 # Constant effect in randomized clinical trials with quantitative outcome. Bibliographic review.
 
-**Under construction**
-
 This code was used to conduct the work explained in the Phd dissertation: *Constant effect in randomized clinical trials with quantitative outcome. Bibliographic review.*
 
 ## Scripts
